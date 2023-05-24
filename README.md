@@ -1,2 +1,4 @@
 # HOUSE-PRICE-PREDICTION-USING-MACHINE-LEARNING-ALGORITHMS
-House price prediction data science project using linear and ridge regression
+I'm Basith AbuSyed. I am doing my final year MCA course at The American College.
+I HAVE DONE MY FINAL YEAR PROJECT ON HOUSE PRICE PREDICTION USING MACHINE LEARNING ALGORITHMS
+I HAVE USED BOTH LINEAR REGRESSION AND RIDGE REGRESSION.

@@ -174,46 +174,7 @@ print()
 print("Thepredicted house price is : ", predicted_data)
 print()
 
-# ===== Graphs =========
-
-import matplotlib.pyplot as plt 
+# graph
 
 import seaborn as sns
-sns.scatterplot(x=data['area_type'], y=data['location'], hue=data['price'])
-plt.title("Scatter Plot")
-plt.show()
-
-
-
-#---
-
-sns.barplot(y=[mae_rf,mae_ridge],x=['RF','Ridge'])
-plt.title("Comparison")
-plt.show()
-
-
-# ----
-
-import matplotlib.pyplot as plt
-import seaborn as sns
-plt.figure(figsize = (7,7))
-counts = data['area_type'].value_counts()
-plt.pie(counts, labels = counts.index, startangle = 90, counterclock = False, wedgeprops = {'width' : 0.6},autopct='%1.1f%%', pctdistance = 0.55, textprops = {'color': 'black', 'fontsize' : 15}, shadow = True,colors = sns.color_palette("Paired")[3:])
-plt.text(x = -0.35, y = 0, s = 'Total Price: {}'.format(data.shape[0]))
-plt.title('Area Type', fontsize = 14);
-plt.savefig("graph.png")
-plt.show()
-
-# ---- 
-
-fig, ax = plt.subplots(figsize=(6,6)) 
-sns.heatmap(data[["area_type", "location", "society"]].corr(), annot = True)
-plt.show()
-
-
-
-
-
-
-
-
+sns.barplot(y=[mae_rf,mae_ridge],x=["RF","Ridge"])

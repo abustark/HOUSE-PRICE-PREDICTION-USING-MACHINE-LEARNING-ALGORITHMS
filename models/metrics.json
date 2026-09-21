@@ -1,0 +1,84 @@
+{
+  "created": "2026-09-21 05:42",
+  "dataset": {
+    "file": "data/Bengaluru_House_Data.csv",
+    "source": "https://www.kaggle.com/amitabhajoy/bengaluru-house-price-data",
+    "rows": 13320,
+    "columns": 9
+  },
+  "split": {
+    "train": 9282,
+    "test": 3979,
+    "test_size": 0.3,
+    "random_state": 2
+  },
+  "target": "price (Lakh INR)",
+  "target_transform": "log1p (predictions inverted before scoring)",
+  "rows_dropped": 59,
+  "features": [
+    "total_sqft",
+    "bath",
+    "balcony",
+    "bhk",
+    "area_type",
+    "completion_year",
+    "location",
+    "society"
+  ],
+  "models": {
+    "linear": {
+      "name": "Linear Regression",
+      "params": {},
+      "test": {
+        "r2_log": 0.644,
+        "mae_log": 0.317,
+        "mae": 44.8,
+        "rmse": 173.03
+      },
+      "cv": {
+        "mae_log_mean": 0.32,
+        "mae_log_std": 0.005,
+        "r2_log_mean": 0.623,
+        "r2_log_std": 0.033
+      }
+    },
+    "ridge": {
+      "name": "Ridge Regression",
+      "params": {
+        "alpha": 0.1
+      },
+      "test": {
+        "r2_log": 0.644,
+        "mae_log": 0.317,
+        "mae": 44.8,
+        "rmse": 173.02
+      },
+      "cv": {
+        "mae_log_mean": 0.32,
+        "mae_log_std": 0.005,
+        "r2_log_mean": 0.623,
+        "r2_log_std": 0.033
+      }
+    },
+    "random_forest": {
+      "name": "Random Forest",
+      "params": {
+        "n_estimators": 200,
+        "min_samples_leaf": 3
+      },
+      "test": {
+        "r2_log": 0.787,
+        "mae_log": 0.231,
+        "mae": 31.41,
+        "rmse": 89.35
+      },
+      "cv": {
+        "mae_log_mean": 0.231,
+        "mae_log_std": 0.002,
+        "r2_log_mean": 0.776,
+        "r2_log_std": 0.014
+      }
+    }
+  },
+  "best_model": "random_forest"
+}

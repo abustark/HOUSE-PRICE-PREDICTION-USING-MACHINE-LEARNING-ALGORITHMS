@@ -9,7 +9,19 @@ This document tracks every commit following the `2.0.x` versioning schema:
 
 ## Commit History
 
-### 2.0.4 - Streamlit Cloud deployment notes
+### 2.0.5 - rewrote the 23 original presentation slides to the refreshed project
+
+- **Date**: 2026-09-21
+
+- **Changes**:
+
+  - `docs/House Price.pptx`: every content slide of the original 23-slide deck rewritten in place to match the refreshed project — abstract/objectives/advantages, Kaggle data selection, preprocessing (unit conversion, 59 impossible rows, feature engineering), 70/30 split, model training (Linear / Ridge / tuned Random Forest, log price target), performance with the final metrics, conclusion and references.
+  - Flow diagram labels updated to the real pipeline stages (data loading → preprocessing & features → splitting 70/30 → model training → evaluation → save models → web app + REST API).
+  - "CLASSIFICATION" titles corrected to "MODEL TRAINING".
+  - Placeholder charts replaced with real project charts: missing-value profile, price vs area / price by BHK, R² and MAE model comparison, and actual-vs-predicted examples for all three models.
+  - Empty content slides (data selection stats, split summary) filled with the real dataset numbers.
+
+- **Gates run (green)**: structural re-dump of all 23 slides (titles, text, 15/15 flow labels, image slots verified); no code touched, no AI/agent references added.
 
 - **Date**: 2026-09-21
 

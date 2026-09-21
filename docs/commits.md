@@ -9,6 +9,16 @@ This document tracks every commit following the `2.0.x` versioning schema:
 
 ## Commit History
 
+### 2.0.4 - Streamlit Cloud deployment notes
+
+- **Date**: 2026-09-21
+
+- **Changes**:
+
+  - README: added a Streamlit Cloud section for the Streamlit face (no secrets needed — `models/` is committed) and pointed the FastAPI face at container hosts (Render, Railway, Fly.io, VPS).
+
+- **Gates run (green)**: docs-only change; no code touched.
+
 ### 2.0.3 - documentation, presentation v2 slides and commit log
 
 - **Date**: 2026-09-21

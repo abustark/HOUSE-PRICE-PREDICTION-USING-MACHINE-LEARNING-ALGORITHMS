@@ -196,6 +196,17 @@ docker run -p 8000:8000 house-price
 # UI + API at http://localhost:8000
 ```
 
+### Deploy the Streamlit app (Streamlit Cloud)
+
+1. Push the repository to GitHub.
+2. On [share.streamlit.io](https://share.streamlit.io): **New app** → pick the
+   repository and branch, main file `app/app.py`.
+3. No secrets are needed — the trained models and encoders are committed in
+   `models/`.
+
+The FastAPI face is best run as the Docker image above (any container host:
+Render, Railway, Fly.io, a VPS).
+
 ## Tests and CI
 
 ```bash

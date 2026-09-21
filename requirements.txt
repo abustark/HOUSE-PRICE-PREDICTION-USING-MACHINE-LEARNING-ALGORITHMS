@@ -1,5 +1,9 @@
 streamlit
+fastapi
+uvicorn
 pandas
+numpy
 scikit-learn
 joblib
-numpy
+matplotlib
+seaborn

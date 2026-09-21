@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bengaluru House Price Prediction</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏡</text></svg>" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-icon">🏡</span>
+      <div>
+        <h1>Bengaluru House Price Prediction</h1>
+        <p class="tagline">Three ML models · 13,320 listings · prices in Lakh INR</p>
+      </div>
+    </div>
+    <a class="api-link" href="/docs" target="_blank" rel="noopener">API docs ↗</a>
+  </header>
+
+  <main class="layout">
+    <section class="card form-card" aria-label="House details">
+      <h2>House details</h2>
+
+      <div class="grid">
+        <label>Area type
+          <select id="area_type"></select>
+        </label>
+        <label>Location
+          <select id="location"></select>
+        </label>
+        <label>Size (BHK)
+          <select id="bhk"></select>
+        </label>
+        <label>Total area (sqft)
+          <input id="total_sqft" type="number" min="100" max="20000" step="10" value="1200" />
+        </label>
+        <label>Bathrooms
+          <input id="bath" type="number" min="0" max="10" value="2" />
+        </label>
+        <label>Balconies
+          <input id="balcony" type="number" min="0" max="5" value="1" />
+        </label>
+      </div>
+
+      <div class="availability">
+        <label>
+          <input type="radio" name="availability" value="ready" checked />
+          Ready to move
+        </label>
+        <label>
+          <input type="radio" name="availability" value="under" />
+          Under construction, expected by
+          <input id="year" type="number" min="2013" max="2030" value="2020" disabled />
+        </label>
+      </div>
+
+      <label>Society name (optional)
+        <input id="society" type="text" placeholder="Leave blank if unknown" />
+      </label>
+
+      <h3>Model</h3>
+      <div id="model-chips" class="chips" role="radiogroup" aria-label="Model selection"></div>
+
+      <button id="predict-btn" class="predict-btn" type="button">
+        Predict price
+      </button>
+      <p id="form-error" class="error" hidden></p>
+    </section>
+
+    <section class="card result-card" aria-live="polite">
+      <div id="result-empty" class="empty-state">
+        <div class="empty-icon">📊</div>
+        <h2>Your prediction appears here</h2>
+        <p>Fill in the house details and press <strong>Predict price</strong>.<br />
+        All three models score every input, so you can compare them side by side.</p>
+      </div>
+
+      <div id="result-body" hidden>
+        <p class="result-label">Predicted price</p>
+        <p class="price"><span id="price-lakh">–</span> <span class="price-unit">Lakh</span></p>
+        <p class="price-inr" id="price-inr">–</p>
+        <p class="result-model" id="result-model">–</p>
+
+        <h3>All models on this input</h3>
+        <table class="compare-table">
+          <thead>
+            <tr><th>Model</th><th>Price (Lakh)</th><th>R² (log)</th></tr>
+          </thead>
+          <tbody id="compare-rows"></tbody>
+        </table>
+
+        <p id="unseen-note" class="note" hidden>
+          ⓘ The society name was not in the training data, so it was treated as
+          an unseen society and the other features carried the prediction.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>
+      Trained on a 2017–2020 snapshot of Bengaluru listings (Kaggle, CC0).
+      Predictions are estimates, not market quotes.
+    </p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

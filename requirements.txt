@@ -1,9 +1,14 @@
-streamlit
+# Runtime dependencies for serving the FastAPI app and making predictions.
+# Kept lean on purpose: this is the file Vercel installs when deploying, and
+# the function bundle is capped at 500 MB.
+#
+# Local development extras (Streamlit UI, training plots, pytest) live in
+# requirements-dev.txt.
 fastapi
 uvicorn
 pandas
 numpy
-scikit-learn
+# The saved models in models/ were pickled by scikit-learn 1.9.1; keep the
+# runtime on that exact version so they load without compatibility warnings.
+scikit-learn==1.9.1
 joblib
-matplotlib
-seaborn

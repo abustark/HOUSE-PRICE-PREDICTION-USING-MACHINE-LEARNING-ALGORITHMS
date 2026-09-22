@@ -64,7 +64,9 @@ All models on this input:
 # 1. create a virtual environment and install the dependencies
 python3 -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt # everything: FastAPI + Streamlit + plots + pytest
+# `pip install -r requirements.txt` installs the lean runtime set only,
+# which is enough for option B below and is what Vercel deploys.
 
 # 2. (optional) retrain the models from the raw data
 python src/train.py

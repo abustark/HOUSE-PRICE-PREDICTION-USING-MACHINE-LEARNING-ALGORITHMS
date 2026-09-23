@@ -6,14 +6,18 @@
  * Run (Linux sandbox): LD_LIBRARY_PATH=/tmp/al2023-libs/lib FONTCONFIG_PATH=/tmp/fonts node tools/visual-check.js
  * Run (dev machine):   npm run visual:local   (uses an installed Chrome/Edge)
  * Override:            ABOT_CHROME=<path-to-chrome> node tools/visual-check.js
+ * Policy:              LOCAL BROWSER FIRST — a locally installed Chrome/Edge is always
+ *                      preferred; @sparticuz/chromium (sandbox) only if nothing is installed.
  * Requires: node server.js running on :3000.
  */
 const path = require('path');
 const fs = require('fs');
 const puppeteer = require('puppeteer-core');
 
-// @sparticuz/chromium is the sandbox's npm-shipped Linux Chromium; an ordinary
-// dev machine has no such package, so fall back to a locally installed browser.
+// Browser policy — LOCAL FIRST, SANDBOX LAST: an agent must look for a locally
+// installed browser (Chrome or Edge; Safari cannot be driven by puppeteer) and
+// actually run against it. @sparticuz/chromium — the sandbox's npm-shipped Linux
+// Chromium — is only a fallback for remote machines with no browser installed.
 let chromium = null;
 try { chromium = require('@sparticuz/chromium').default; } catch { chromium = null; }
 
@@ -24,27 +28,36 @@ const LOCAL_BROWSERS = [
     'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
     'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
     '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
+    '/usr/bin/google-chrome',
+    '/usr/bin/google-chrome-stable',
+    '/usr/bin/microsoft-edge',
+    '/usr/bin/microsoft-edge-stable',
+    '/usr/bin/chromium',
+    '/usr/bin/chromium-browser',
 ];
 
 async function launchBrowser() {
-    const forced = process.env.ABOT_CHROME;
-    if (!forced && chromium) {
+    // 1) A locally installed browser always wins (ABOT_CHROME is checked first).
+    const localExe = LOCAL_BROWSERS.find((p) => p && fs.existsSync(p));
+    if (localExe) {
+        console.log(`[visual] using local browser: ${localExe}`);
+        return puppeteer.launch({
+            executablePath: localExe,
+            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
+            headless: true,
+        });
+    }
+    // 2) Nothing installed locally → only now fall back to the sandbox Chromium.
+    if (chromium) {
+        console.log('[visual] no local browser found - falling back to @sparticuz/chromium (sandbox)');
         return puppeteer.launch({
             args: [...chromium.args, '--no-sandbox', '--disable-setuid-sandbox'],
             executablePath: await chromium.executablePath(),
             headless: 'shell',
         });
     }
-    const localExe = forced || LOCAL_BROWSERS.find((p) => p && fs.existsSync(p));
-    if (!localExe) {
-        throw new Error('No Chromium available: install @sparticuz/chromium (sandbox) or set ABOT_CHROME=<path-to-chrome>');
-    }
-    console.log(`[visual] using local browser: ${localExe}`);
-    return puppeteer.launch({
-        executablePath: localExe,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
-        headless: true,
-    });
+    throw new Error('No browser available: install Chrome/Edge, set ABOT_CHROME=<path-to-browser>, or install @sparticuz/chromium (sandbox)');
 }
 
 const ROOT = path.join(__dirname, '..');

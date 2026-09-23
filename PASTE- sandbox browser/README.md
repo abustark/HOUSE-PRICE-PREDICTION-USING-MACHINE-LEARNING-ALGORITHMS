@@ -9,6 +9,19 @@
 > `tools/visual-check.js` (working reference implementation). Copied here verbatim at ABot commit
 > `f1e79bf` (v2.0.28). If the repo copy changes, re-copy it here.
 
+## ⚠️ Browser policy — LOCAL FIRST, sandbox/remote LAST (read before running)
+
+1. **First, look for a locally installed browser and actually use it** — Chrome or Edge
+   (standard Windows/macOS/Linux install paths; force a specific binary with
+   `ABOT_CHROME=<path>`). This is the normal path on any dev machine.
+2. **Safari cannot be driven** by Playwright/puppeteer — on macOS use the installed
+   Chrome/Edge instead.
+3. **Only when no local browser exists at all** (bare remote server / headless sandbox)
+   fall back to the remote path: the npm-shipped `@sparticuz/chromium` binary.
+
+`visual-check.js` resolves in exactly this order: `ABOT_CHROME` → local Chrome/Edge →
+`@sparticuz/chromium` (fallback only).
+
 ## Files in this folder
 
 | File | What it is |
@@ -33,8 +46,8 @@
   **with** internet, real third-party scripts (Firebase SDK from gstatic, Google Identity, CDNs) load
   and overwrite your injected mocks — `visual-check.js` therefore **blocks every non-localhost
   request** via `page.setRequestInterception`. Keep that.
-- Browser resolution order in the reference implementation:
-  `ABOT_CHROME` env override → locally installed Chrome/Edge (Windows paths + macOS) →
-  `@sparticuz/chromium` (Linux sandbox binary).
+- Browser resolution order (**local first!**): `ABOT_CHROME` env override → locally installed
+  Chrome/Edge (Windows + macOS + Linux paths) → `@sparticuz/chromium`, the Linux sandbox binary,
+  **only as a fallback when no local browser is installed**.
 - Screenshots are your evidence: save them on every run and assert geometry with
   `getBoundingClientRect()`, not vibes.

@@ -114,8 +114,10 @@ npm run visual:local   # dev machine (Windows/macOS): uses installed Chrome/Edge
 ABOT_CHROME="C:\Program Files\Google\Chrome\Application\chrome.exe" node tools/visual-check.js
 ```
 
-The tool resolves a browser in this order: `ABOT_CHROME` → `@sparticuz/chromium` (when installed) →
-a locally installed Chrome/Edge (Windows paths + macOS). It also **blocks every non-localhost request**:
+**Browser policy — LOCAL FIRST:** the tool resolves a browser in this order: `ABOT_CHROME` → a
+**locally installed Chrome/Edge** (Windows/macOS/Linux paths) → `@sparticuz/chromium`
+**only as a fallback when no local browser exists** (Safari can't be automated — use installed
+Chrome/Edge on macOS). It also **blocks every non-localhost request**:
 on a machine with internet the real Firebase SDK loads from gstatic and overwrites the injected mock,
 so the fake login would never happen (the sandbox is offline, which is why this only bites on dev machines).
 

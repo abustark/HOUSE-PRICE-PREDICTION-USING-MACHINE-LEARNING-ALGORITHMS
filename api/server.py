@@ -2,7 +2,7 @@
 FastAPI server for the Bengaluru house price prediction project.
 
 Serves the JSON API and the single-page web UI that lives in
-api/static/. The same three models used by the Streamlit app are loaded
+static/. The same three models used by the Streamlit app are loaded
 once at startup.
 
 Run with:
@@ -22,7 +22,7 @@ from pydantic import BaseModel, Field  # noqa: E402
 
 from src.predict import load_artifacts, predict_all  # noqa: E402
 
-STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+STATIC_DIR = os.path.join(BASE_DIR, "static")
 
 artifacts = load_artifacts()
 metrics = artifacts["metrics"]

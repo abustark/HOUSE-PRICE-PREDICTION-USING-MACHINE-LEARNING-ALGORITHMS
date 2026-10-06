@@ -1,0 +1,7 @@
+# Everything needed to run the project locally: the FastAPI app, the Streamlit
+# UI, the training/plotting pipeline and the test suite.
+-r requirements.txt
+streamlit
+matplotlib
+seaborn
+pytest

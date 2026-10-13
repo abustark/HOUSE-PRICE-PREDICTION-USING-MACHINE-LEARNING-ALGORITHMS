@@ -1,5 +1,10 @@
 # HOUSE PRICE PREDICTION USING MACHINE LEARNING ALGORITHMS
 
+> 📄 **[`PROJECT-INFO.md`](PROJECT-INFO.md)** — machine-readable project facts (stack + exact versions, architecture, metrics, keyword tags) designed so an AI can generate resume entries and portfolio project summaries from it alone.
+
+> **Live demo (Streamlit):** https://house-price-prediction-using-machine-learning-algorithms-9qccn.streamlit.app/
+> **Repo:** https://github.com/abustark/HOUSE-PRICE-PREDICTION-USING-MACHINE-LEARNING-ALGORITHMS
+
 Final year MCA project - **Basith AbuSyed**, The American College.
 
 Predict the price of a house in Bengaluru from its basic details using

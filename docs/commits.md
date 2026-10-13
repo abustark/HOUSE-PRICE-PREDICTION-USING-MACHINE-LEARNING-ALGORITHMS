@@ -9,6 +9,18 @@ This document tracks every commit following the `2.0.x` versioning schema:
 
 ## Commit History
 
+### 2.0.6 - docs: Streamlit live URL + PROJECT-INFO.md resume sheet
+
+- **Date**: 2026-10-13
+
+- **Changes**:
+
+  - `README.md`: added live-demo block with the canonical Streamlit URL (`house-price-prediction-using-machine-learning-algorithms-9qccn.streamlit.app`) + repo link; added `PROJECT-INFO.md` pointer.
+  - New `PROJECT-INFO.md`: machine-readable facts (stack + `scikit-learn==1.9.1`, 3-model comparison with RF R² 0.787, dual FastAPI + Streamlit serving, 7 pytest tests, ATS tags, ready-made resume bullets/paragraph/card) so future AI can summarize without reading the code.
+  - GitHub About page (`homepageUrl`) pointed at the Streamlit URL (was `hpp-flax.vercel.app`).
+
+- **Gates run (green)**: docs-only change; no code touched.
+
 ### 2.0.5 - rewrote the 23 original presentation slides to the refreshed project
 
 - **Date**: 2026-09-21

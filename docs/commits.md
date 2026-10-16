@@ -9,6 +9,16 @@ This document tracks every commit following the `2.0.x` versioning schema:
 
 ## Commit History
 
+### 2.0.8 - docs: PROJECT-INFO.md - add resume framing note
+
+- **Date**: 2026-10-16
+
+- **Changes**:
+
+  - `PROJECT-INFO.md` §9: tone guide now opens with a framing note — impact = user capability + hardest engineering problem solved (no business KPIs).
+
+- **Gates run (green)**: docs-only change; no code touched.
+
 ### 2.0.7 - docs: fix stale PROJECT-INFO.md metrics and tone guide
 
 - **Date**: 2026-10-16

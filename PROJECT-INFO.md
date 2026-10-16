@@ -47,7 +47,7 @@
 | Deployment | Docker | `FROM python:3.11-slim` | `docker build -t house-price`, `EXPOSE 8000` |
 | Deployment | Vercel | lean `requirements.txt` (500 MB cap) + root `main.py` re-export | Serverless entry (`hpp-ml` project link, no public URL) |
 | Notebook | Jupyter | `notebooks/House_Price_Prediction.ipynb`, 33 cells, executed | Pipeline reproduction |
-| VCS | Git / GitHub | main branch | ~2023-05-24 to 2026-09-24 history |
+| VCS | Git / GitHub | main branch | ~2023-05-24 to 2026-10-16 history |
 
 ---
 
@@ -89,7 +89,7 @@
 
 ## 6. Scale metrics (quantifiables)
 
-- **49** git-tracked files; **~1,152 lines** across **11** Python files (`train.py` 444, `server.py` 149, `app.py` 162, `encoding.py` 119, `predict.py` 95, 3 pages 290, `test_predict.py` 97).
+- **50** git-tracked files; **~1,382 lines** across **11** Python files (`train.py` 444, `server.py` 149, `app.py` 162, `encoding.py` 119, `predict.py` 95, 3 pages 290, `test_predict.py` 97, `main.py` 25, `__init__.py` 1).
 - **3 models** + **6 API routes** + **8 features** + **8 charts** + **4 Streamlit pages** + **1 SPA**.
 - **13,320 rows × 9 cols** dataset (~0.88 MB); train 9,282 / test 3,979; 59 rows dropped.
 - **7 pytest tests**; **5-fold CV** for Ridge-α + RF grid + final reporting.
@@ -132,4 +132,4 @@ house price prediction, regression, Bengaluru housing, Random Forest, Ridge Regr
 
 **Portfolio card (title + ~30 words + stack):** Bengaluru House Prices — describe any flat (location, BHK, sqft, baths) and compare three models' predictions side-by-side with R² scores and diagnostics. Dual FastAPI + Streamlit UI, Docker-ready. `Python · scikit-learn · FastAPI · Streamlit · Docker`
 
-**Tone/length guide for the AI:** resume = 3–5 dense bullets or one 3-line paragraph, lead with verbs and numbers, keywords from §8; portfolio = friendly paragraph + model table + UI links + stack chips, mention the 13,320-row dataset, the 0.787 R² winner, and the dual UI; never claim a live public URL, XGBoost, or a code license — none exist.
+**Tone/length guide for the AI:** resume = 3–5 dense bullets or one 3-line paragraph, lead with verbs and numbers, keywords from §8; portfolio = friendly paragraph + model table + UI links + stack chips, mention the 13,320-row dataset, the 0.787 R² winner, and the dual UI; never claim XGBoost or a code license — none exist; the Streamlit site is live, while the FastAPI + SPA face is local-only.

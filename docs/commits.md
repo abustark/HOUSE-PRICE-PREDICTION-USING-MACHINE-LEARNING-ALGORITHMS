@@ -9,6 +9,19 @@ This document tracks every commit following the `2.0.x` versioning schema:
 
 ## Commit History
 
+### 2.0.7 - docs: fix stale PROJECT-INFO.md metrics and tone guide
+
+- **Date**: 2026-10-16
+
+- **Changes**:
+
+  - `PROJECT-INFO.md` §6: corrected Python scale metrics — **50** git-tracked files (was 49) and **~1,382 lines** across 11 Python files (was ~1,152; the per-file breakdown summed higher than the stated total); breakdown now lists `main.py` (25) and `api/__init__.py` (1) so it sums correctly.
+  - `PROJECT-INFO.md` §9: dropped "never claim a live public URL" — stale since v2.0.6 added the canonical Streamlit URL; the guide now only forbids claiming XGBoost or a code license.
+  - `PROJECT-INFO.md` §2: VCS history end date refreshed (`~2023-05-24 to 2026-10-16`).
+  - `docs/commits.md`: restored the missing `### 2.0.4` heading on the orphaned README entry (Streamlit Cloud section + container hosts).
+
+- **Gates run (green)**: docs-only change; no code touched.
+
 ### 2.0.6 - docs: Streamlit live URL + PROJECT-INFO.md resume sheet
 
 - **Date**: 2026-10-13
@@ -34,6 +47,8 @@ This document tracks every commit following the `2.0.x` versioning schema:
   - Empty content slides (data selection stats, split summary) filled with the real dataset numbers.
 
 - **Gates run (green)**: structural re-dump of all 23 slides (titles, text, 15/15 flow labels, image slots verified); no code touched, no AI/agent references added.
+
+### 2.0.4 - README: Streamlit Cloud section + container hosts for the FastAPI face
 
 - **Date**: 2026-09-21
 

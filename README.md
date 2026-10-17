@@ -222,7 +222,7 @@ pytest -q
 
 The suite covers the artifact shapes, the prediction path (known/unknown
 inputs, plausibility, monotonicity) and the API routes. GitHub Actions runs
-it on every push and pull request (the workflow file ships in a follow-up commit - see `docs/commits.md`).
+it on every push and pull request (the workflow file ships in a follow-up commit - see `COMMIT-HISTORY.md`).
 
 ## Tech stack
 

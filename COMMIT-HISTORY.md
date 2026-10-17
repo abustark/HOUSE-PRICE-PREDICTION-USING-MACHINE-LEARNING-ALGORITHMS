@@ -10,6 +10,27 @@ This document tracks every commit following the `2.0.x` versioning schema:
 
 ## Commit History
 
+### 2.0.10 - rename commit log to COMMIT-HISTORY.md (universal name)
+
+- **Date**: 2026-10-17
+
+- **Changes**:
+
+  - `docs/commits.md` → **`COMMIT-HISTORY.md`** (repo root) — same universal commit-log name in every repo; `PROJECT-INFO.md` + `README.md` references updated.
+  - Cross-repo same batch: abot (`2.3.1`), project_bmw (`2.0.21`); `price-trail` / `linkly` / `cover_letter_gen` start versioned commits at `2.0.0`.
+
+- **Gates run (green)**: docs-only rename; no code touched.
+
+### 2.0.9 - add one-version-per-agent-response rule to commit log schema
+
+- **Date**: 2026-10-17
+
+- **Changes**:
+
+  - `docs/commits.md`: batching rule added to the schema header — a single owner request (even if it fixes many issues) consumes exactly ONE version number; multiple commits in one response share it; only a new owner request advances it.
+
+- **Gates run (green)**: docs-only change; no code touched.
+
 ### 2.0.8 - docs: PROJECT-INFO.md - add resume framing note
 
 - **Date**: 2026-10-16

@@ -83,7 +83,7 @@
 - **`pytest -q` — 7 tests, 1 file (`tests/test_predict.py`):** artifact shapes (3 models + `best_model` + finite R²/MAE/RMSE), finite-price prediction, plausibility (2BHK 1200 Whitefield within 5–1000 Lakh), unseen-society no-crash, blank/placeholder-as-missing, monotonicity (700/1BHK < 2400/4BHK), API route import (`/, /health, /models, /locations, /meta, /predict`).
 - **CI:** `.github/workflows/ci.yml` — `setup-python 3.11 + pip install -r requirements.txt + compileall(src,app,api) + pytest -q` on push/PR.
 - **No lint/typecheck:** no ruff/flake8/mypy/black config; only `compileall`.
-- **Docs in-repo:** `README.md` (236 lines), `docs/commits.md` (v2.0.x→2.1.x history), `docs/House Price.pptx` (23 slides), `AGENTS.md`, this sheet.
+- **Docs in-repo:** `README.md` (236 lines), `COMMIT-HISTORY.md` (v2.0.x→2.1.x history), `docs/House Price.pptx` (23 slides), `AGENTS.md`, this sheet.
 
 ---
 

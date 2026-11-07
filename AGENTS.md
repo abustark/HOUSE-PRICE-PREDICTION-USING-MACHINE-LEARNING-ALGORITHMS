@@ -12,6 +12,8 @@ These rules are mandatory for any AI agent working in this repository.
 
 4. **Save images to the project folder.** Any screenshot, crop, capture, or other image produced while working on this project must also be saved to `D:\projects\HOUSE-PRICE-PREDICTION-USING-MACHINE-LEARNING-ALGORITHMS\artifacts\` (in addition to the working temp folder on C:). Keep file names descriptive.
 
+5. **Package management preference:** Use `bun` / `bunx` instead of `npm` / `npx` for any JavaScript/TypeScript/Node tooling or scripts.
+
 ## Order of Operations
 
 1. Read the user's request.

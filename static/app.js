@@ -1,10 +1,12 @@
 /* Bengaluru House Price Prediction — Modern SPA Client
    Features:
+   - Automatic Lakh / Crore Scaling (>= 100 Lakh -> Crore format, e.g. ₹1.86 Cr)
    - Instant In-App API Console & Explorer (zero full page reload)
    - Synchronized Range Slider + Number Inputs
    - Domain Extrapolation Warning Diagnostics
-   - Historical Calibrated Error Ranges
+   - Historical Calibrated Error Ranges (80% test coverage)
    - Multi-Model Performance Comparison View
+   - Responsive Touch Targets & Smooth Navigation
 */
 
 const $ = (id) => document.getElementById(id);
@@ -18,17 +20,66 @@ let appData = {
 };
 
 // ---------------------------------------------------------------------------
-// Helpers
+// Price Formatting Helpers
 // ---------------------------------------------------------------------------
 function fmtLakh(v) {
-  return Number(v).toLocaleString("en-IN", {
+  const n = Number(v);
+  if (isNaN(n)) return "0.00";
+  return n.toLocaleString("en-IN", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
 }
 
 function fmtInr(v) {
-  return "₹" + Math.round(Number(v)).toLocaleString("en-IN");
+  const n = Number(v);
+  if (isNaN(n)) return "0";
+  return Math.round(n).toLocaleString("en-IN");
+}
+
+/**
+ * Format price according to Indian financial nomenclature:
+ * If value in Lakhs >= 100 (i.e. >= 1 Crore), display as ₹X.XX Cr.
+ * If value in Lakhs < 100, display as ₹XX.XX Lakh.
+ */
+function formatPriceBreakdown(lakhVal) {
+  const v = Number(lakhVal);
+  if (isNaN(v) || v <= 0) {
+    return { numStr: "–", unit: "Lakh", fullStr: "–", altStr: "" };
+  }
+
+  if (v >= 100) {
+    const cr = v / 100.0;
+    const numStr = cr.toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+    const lakhAlt = v.toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+    return {
+      numStr,
+      unit: "Cr",
+      fullStr: `₹${numStr} Cr`,
+      altStr: `₹${lakhAlt} Lakh`,
+    };
+  } else {
+    const numStr = v.toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+    return {
+      numStr,
+      unit: "Lakh",
+      fullStr: `₹${numStr} Lakh`,
+      altStr: "",
+    };
+  }
+}
+
+function formatPrice(lakhVal) {
+  return formatPriceBreakdown(lakhVal).fullStr;
 }
 
 async function fetchJSON(url, options) {
@@ -38,6 +89,7 @@ async function fetchJSON(url, options) {
 }
 
 function fillSelect(el, items, selectedVal) {
+  if (!el) return;
   el.innerHTML = "";
   for (const item of items) {
     const opt = document.createElement("option");
@@ -64,14 +116,19 @@ function initTabs() {
 
       const targetView = tab.getAttribute("data-view");
       document.querySelectorAll(".view-panel").forEach((panel) => {
-        panel.hidden = panel.id !== `view-${targetView}`;
-        if (panel.id === `view-${targetView}`) {
+        const isMatch = panel.id === `view-${targetView}`;
+        panel.hidden = !isMatch;
+        if (isMatch) {
           panel.classList.add("active");
         } else {
           panel.classList.remove("active");
         }
       });
     });
+  });
+
+  $("btn-back-to-top")?.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 }
 
@@ -80,6 +137,7 @@ function initTabs() {
 // ---------------------------------------------------------------------------
 function renderModelChips() {
   const container = $("model-chips");
+  if (!container) return;
   container.innerHTML = "";
 
   for (const m of appData.models) {
@@ -89,19 +147,25 @@ function renderModelChips() {
     btn.setAttribute("role", "radio");
     btn.setAttribute("aria-checked", String(m.key === appData.selectedModel));
 
+    const titleRow = document.createElement("div");
+    titleRow.className = "chip-top-row";
+
     const name = document.createElement("span");
+    name.className = "chip-name";
     name.textContent = m.name;
-    btn.appendChild(name);
+    titleRow.appendChild(name);
 
     if (m.key === appData.bestModel) {
       const tag = document.createElement("span");
       tag.className = "best-tag";
-      tag.textContent = "Best";
-      btn.appendChild(tag);
+      tag.textContent = "Selected";
+      titleRow.appendChild(tag);
     }
+    btn.appendChild(titleRow);
 
     const r2 = document.createElement("small");
-    r2.textContent = `R² ${m.r2_log.toFixed(3)}`;
+    r2.className = "chip-stat";
+    r2.textContent = `Test R² ${m.r2_log.toFixed(3)}`;
     btn.appendChild(r2);
 
     btn.addEventListener("click", () => {
@@ -192,15 +256,26 @@ function renderPredictionResult(data) {
   $("result-empty").hidden = true;
   $("result-body").hidden = false;
 
-  $("price-lakh").textContent = fmtLakh(data.predicted_price_lakh);
-  $("price-inr").textContent = `≈ ${fmtInr(data.predicted_price_inr)}`;
+  // Format price: >= 100 Lakh becomes Crore (Cr)
+  const breakdown = formatPriceBreakdown(data.predicted_price_lakh);
+  $("price-num").textContent = breakdown.numStr;
+  $("price-unit").textContent = breakdown.unit;
+
+  // Subtext: show approx INR and Lakh equivalent if formatted in Crore
+  let subtext = `≈ ₹${fmtInr(data.predicted_price_inr)}`;
+  if (breakdown.unit === "Cr") {
+    subtext += ` (${breakdown.altStr})`;
+  }
+  $("price-subtext").textContent = subtext;
   $("active-model-badge").textContent = data.model_name || data.model;
 
-  // Calibrated error range
+  // Calibrated error range in Lakh / Crore
   if (data.historical_error_range) {
     const r = data.historical_error_range;
     $("error-range-box").hidden = false;
-    $("error-range-val").textContent = `₹${fmtLakh(r.lower_lakh)} Lakh – ₹${fmtLakh(r.upper_lakh)} Lakh`;
+    const lowerFormatted = formatPrice(r.lower_lakh);
+    const upperFormatted = formatPrice(r.upper_lakh);
+    $("error-range-val").textContent = `${lowerFormatted} – ${upperFormatted}`;
   } else {
     $("error-range-box").hidden = true;
   }
@@ -231,12 +306,20 @@ function renderPredictionResult(data) {
     if (!entry) continue;
     const tr = document.createElement("tr");
     if (m.key === data.model_key) tr.className = "highlight";
+    
+    // Format each model's estimate with Crore/Lakh scaling
+    const modelPrice = formatPrice(entry.price_lakh);
     tr.innerHTML = `
-      <td>${m.name}</td>
-      <td class="align-right">₹${fmtLakh(entry.price_lakh)} Lakh</td>
-      <td class="align-right">${m.r2_log.toFixed(3)}</td>
+      <td><strong>${m.name}</strong> ${m.key === data.model_key ? '<span class="selected-pill">Active</span>' : ''}</td>
+      <td class="align-right monospaced-num">${modelPrice}</td>
+      <td class="align-right monospaced-num">${m.r2_log.toFixed(3)}</td>
     `;
     tbody.appendChild(tr);
+  }
+
+  // Mobile convenience: scroll smoothly to result if on small viewport
+  if (window.innerWidth <= 840) {
+    $("result-container")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 }
 
@@ -281,7 +364,7 @@ const API_ENDPOINTS = {
   predict: {
     method: "POST",
     path: "/predict",
-    desc: "Send house attributes to calculate regression estimates, calibrated 80% error intervals, and domain extrapolation warnings.",
+    desc: "Calculate regression price estimates, calibrated 80% error intervals, and domain extrapolation warnings.",
     hasPayload: true,
     defaultPayload: JSON.stringify(
       {
@@ -345,7 +428,27 @@ function initApiConsole() {
     });
   });
 
-  $("btn-send-api").addEventListener("click", sendApiRequest);
+  $("btn-send-api")?.addEventListener("click", sendApiRequest);
+  
+  $("btn-reset-payload")?.addEventListener("click", () => {
+    const ep = API_ENDPOINTS[currentEndpointKey];
+    if (ep && ep.defaultPayload) {
+      $("ep-payload").value = ep.defaultPayload;
+    }
+  });
+
+  $("btn-copy-response")?.addEventListener("click", () => {
+    const text = $("ep-response").textContent;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = $("btn-copy-response");
+        const orig = btn.textContent;
+        btn.textContent = "Copied!";
+        setTimeout(() => (btn.textContent = orig), 1800);
+      });
+    }
+  });
+
   selectEndpoint("predict");
 }
 
@@ -369,7 +472,7 @@ function selectEndpoint(key) {
   }
 
   $("api-status-pill").hidden = true;
-  $("ep-response").textContent = `Click "Send Request" to invoke ${ep.method} ${ep.path} live...`;
+  $("ep-response").textContent = `Click "Send Live Request" to invoke ${ep.method} ${ep.path} live...`;
 }
 
 async function sendApiRequest() {
@@ -397,19 +500,19 @@ async function sendApiRequest() {
 
     statusPill.hidden = false;
     statusPill.textContent = `Status: ${res.status} ${res.statusText || (res.ok ? "OK" : "Error")} (${ms}ms)`;
-    statusPill.style.color = res.ok ? "var(--emerald)" : "var(--rose)";
-    statusPill.style.background = res.ok ? "rgba(16, 185, 129, 0.15)" : "rgba(244, 63, 94, 0.15)";
-    statusPill.style.borderColor = res.ok ? "rgba(16, 185, 129, 0.3)" : "rgba(244, 63, 94, 0.3)";
+    statusPill.style.color = res.ok ? "var(--accent)" : "var(--danger)";
+    statusPill.style.background = res.ok ? "var(--accent-subtle)" : "var(--danger-bg)";
+    statusPill.style.borderColor = res.ok ? "var(--line-strong)" : "rgba(248, 113, 113, 0.35)";
 
     responseBox.textContent = JSON.stringify(data, null, 2);
   } catch (err) {
     statusPill.hidden = false;
     statusPill.textContent = "Network Error";
-    statusPill.style.color = "var(--rose)";
+    statusPill.style.color = "var(--danger)";
     responseBox.textContent = `Error: ${err.message || String(err)}`;
   } finally {
     sendBtn.disabled = false;
-    sendBtn.textContent = "▶ Send Request";
+    sendBtn.textContent = "▶ Send Live Request";
   }
 }
 
@@ -424,14 +527,15 @@ function populateMetricsTable() {
   for (const m of appData.models) {
     const tr = document.createElement("tr");
     if (m.key === appData.bestModel) tr.className = "highlight";
+    
     tr.innerHTML = `
       <td><strong>${m.name}</strong> ${m.key === appData.bestModel ? '<span class="best-tag">Selected</span>' : ""}</td>
-      <td>${m.r2_log.toFixed(3)}</td>
-      <td>${m.mae_log.toFixed(3)}</td>
-      <td>₹${fmtLakh(m.mae_lakh)} Lakh</td>
-      <td>₹${fmtLakh(m.medae_lakh)} Lakh</td>
-      <td>₹${fmtLakh(m.rmse_lakh)} Lakh</td>
-      <td>${m.cv_r2_log_mean.toFixed(3)} (±${m.cv_r2_log_std.toFixed(3)})</td>
+      <td class="monospaced-num">${m.r2_log.toFixed(3)}</td>
+      <td class="monospaced-num">${m.mae_log.toFixed(3)}</td>
+      <td class="monospaced-num">${formatPrice(m.mae_lakh)}</td>
+      <td class="monospaced-num">${formatPrice(m.medae_lakh)}</td>
+      <td class="monospaced-num">${formatPrice(m.rmse_lakh)}</td>
+      <td class="monospaced-num">${m.cv_r2_log_mean.toFixed(3)} (±${m.cv_r2_log_std.toFixed(3)})</td>
     `;
     tbody.appendChild(tr);
   }
@@ -446,7 +550,7 @@ async function initApp() {
   initPresets();
   initApiConsole();
 
-  // Load models, locations, metadata
+  // Load models, locations, metadata in parallel
   const [modelsRes, locsRes, metaRes] = await Promise.all([
     fetchJSON("/models"),
     fetchJSON("/locations"),
@@ -477,18 +581,20 @@ async function initApp() {
     fillSelect($("area_type"), areas, "Super built-up Area");
   }
 
-  // Fill BHK select (0 to 10)
+  // Fill BHK select (Studio / RK to 10 BHK)
   const bhkSelect = $("bhk");
-  bhkSelect.innerHTML = "";
-  for (let i = 0; i <= 10; i++) {
-    const opt = document.createElement("option");
-    opt.value = i;
-    opt.textContent = i === 0 ? "Studio / RK" : `${i} BHK`;
-    if (i === 2) opt.selected = true;
-    bhkSelect.appendChild(opt);
+  if (bhkSelect) {
+    bhkSelect.innerHTML = "";
+    for (let i = 0; i <= 10; i++) {
+      const opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = i === 0 ? "Studio / RK" : `${i} BHK`;
+      if (i === 2) opt.selected = true;
+      bhkSelect.appendChild(opt);
+    }
   }
 
-  // Possession change
+  // Possession change handler
   document.querySelectorAll('input[name="availability"]').forEach((radio) => {
     radio.addEventListener("change", () => {
       const under = document.querySelector('input[name="availability"]:checked').value === "under";
@@ -496,7 +602,7 @@ async function initApp() {
     });
   });
 
-  $("predict-btn").addEventListener("click", handlePredict);
+  $("predict-btn")?.addEventListener("click", handlePredict);
 }
 
 initApp().catch((err) => {

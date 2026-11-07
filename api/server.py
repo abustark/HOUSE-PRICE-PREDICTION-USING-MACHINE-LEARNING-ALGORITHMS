@@ -48,7 +48,7 @@ app = FastAPI(
         "Three regression models (Linear, Ridge, Random Forest) are trained with fold-local "
         "preprocessing to prevent data leakage."
     ),
-    version="2.1.0",
+    version="2.2.0",
 )
 
 

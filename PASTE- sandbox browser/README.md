@@ -49,5 +49,4 @@
 - Browser resolution order (**local first!**): `ABOT_CHROME` env override → locally installed
   Chrome/Edge (Windows + macOS + Linux paths) → `@sparticuz/chromium`, the Linux sandbox binary,
   **only as a fallback when no local browser is installed**.
-- Screenshots are your evidence: save them on every run and assert geometry with
-  `getBoundingClientRect()`, not vibes.
+- Visual checks: use screenshots only transiently for DOM and geometry assertions when requested; do not persist screenshot files.

@@ -28,6 +28,14 @@ from src.predict import (  # noqa: E402
     predict_detailed,
 )
 
+
+def format_price_inr(lakh: float) -> str:
+    """Format price in Lakh or Crore depending on magnitude (>= 100 Lakh -> Crore)."""
+    if lakh >= 100:
+        cr = lakh / 100.0
+        return f"₹{cr:,.2f} Cr"
+    return f"₹{lakh:,.2f} Lakh"
+
 st.set_page_config(
     page_title="Bengaluru House Price Prediction",
     page_icon="🏡",
@@ -205,15 +213,19 @@ if st.button("Predict price", type="primary"):
         pred_inr = result["predicted_price_inr"]
         err_range = result["historical_error_range"]
 
+        formatted_price = format_price_inr(pred_lakh)
+        alt_text = f" / ₹{pred_lakh:,.2f} Lakh" if pred_lakh >= 100 else ""
         st.success(
-            f"**Predicted Price ({model_meta[selected]['name']}): ₹{pred_lakh:,.2f} Lakh** "
-            f"(≈ ₹{pred_inr:,.0f})",
+            f"**Predicted Price ({model_meta[selected]['name']}): {formatted_price}** "
+            f"(≈ ₹{pred_inr:,.0f}{alt_text})",
             icon="💰",
         )
 
+        lower_fmt = format_price_inr(err_range["lower_lakh"])
+        upper_fmt = format_price_inr(err_range["upper_lakh"])
         st.info(
             f"**Estimated Historical Error Range (80% coverage):** "
-            f"**₹{err_range['lower_lakh']:,.2f} Lakh – ₹{err_range['upper_lakh']:,.2f} Lakh**  \n"
+            f"**{lower_fmt} – {upper_fmt}**  \n"
             f"Based on out-of-fold cross-validation residuals on the historical 2017–2020 dataset "
             f"(verified {err_range['historical_test_coverage'] * 100:.1f}% test set coverage).",
             icon="📊",
@@ -235,6 +247,7 @@ if st.button("Predict price", type="primary"):
             [
                 {
                     "Model": model_meta[k]["name"],
+                    "Predicted Price": format_price_inr(result["all_models"][k]["price_lakh"]),
                     "Predicted Price (Lakh INR)": round(result["all_models"][k]["price_lakh"], 2),
                     "Predicted Price (INR)": f"₹{result['all_models'][k]['price_inr']:,}",
                     "Test R² (log price)": model_meta[k]["test"]["r2_log"],
@@ -250,4 +263,24 @@ st.caption(
     "⚠️ **Educational and Portfolio Case Study:** Predictions are produced by statistical models "
     "fitted to historical real-estate listings (2017–2020). Property values have evolved significantly; "
     "these estimates are not valid for current buying, selling, or bank appraisal decisions."
+)
+
+st.markdown("---")
+st.markdown(
+    """
+    <div style="text-align: center; color: #94a3b8; font-size: 0.85rem; padding: 1.5rem 0; line-height: 1.8;">
+        <p style="margin: 0; font-weight: 500;">
+            © 2026 <strong>Basith AbuSyed</strong> (ABu). All rights reserved.
+        </p>
+        <p style="margin: 0.2rem 0; font-size: 0.8rem; color: #64748b;">
+            Bengaluru Real Estate Valuation Intelligence · Historical Model Benchmark (2017–2020)
+        </p>
+        <p style="margin-top: 0.5rem;">
+            <a href="https://abufolio.vercel.app/" target="_blank" style="color: #10b981; text-decoration: none; margin: 0 10px;">💼 Portfolio</a> •
+            <a href="https://github.com/abustark/HOUSE-PRICE-PREDICTION-USING-MACHINE-LEARNING-ALGORITHMS" target="_blank" style="color: #38bdf8; text-decoration: none; margin: 0 10px;">🐙 GitHub Repo</a> •
+            <a href="https://www.linkedin.com/in/bas-abu/" target="_blank" style="color: #10b981; text-decoration: none; margin: 0 10px;">🔗 LinkedIn</a>
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )

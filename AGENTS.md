@@ -10,7 +10,7 @@ These rules are mandatory for any AI agent working in this repository.
 
 3. **Remind, don't run.** In its response, the AI may remind the user that running or testing the new updates is available. It must only actually run them after the user acknowledges or explicitly proceeds with it.
 
-4. **Save images to the project folder.** Any screenshot, crop, capture, or other image produced while working on this project must also be saved to `D:\projects\HOUSE-PRICE-PREDICTION-USING-MACHINE-LEARNING-ALGORITHMS\artifacts\` (in addition to the working temp folder on C:). Keep file names descriptive.
+4. **Do not save screenshots/artifacts.** Do not save screenshots, captures, or image files to the repository or project folder. Screenshots are only for the AI's internal visual checks/tests when explicitly requested, and must never be saved or committed to the project.
 
 5. **Package management preference:** Use `bun` / `bunx` instead of `npm` / `npx` for any JavaScript/TypeScript/Node tooling or scripts.
 

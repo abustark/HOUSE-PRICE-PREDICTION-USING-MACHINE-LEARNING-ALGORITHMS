@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bengaluru House Price Prediction · ML Platform</title>
+  <title>Bengaluru House Price Prediction · ML Model Platform</title>
+  
+  <!-- Typography matching Abu's portfolio design language -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  
   <link rel="stylesheet" href="/static/style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏡</text></svg>" />
 </head>
@@ -12,28 +18,32 @@
   <header class="topbar">
     <div class="brand">
       <span class="brand-icon">🏡</span>
-      <div>
+      <div class="brand-text-group">
         <div class="brand-title-row">
           <h1>Bengaluru House Price Prediction</h1>
-          <span class="badge badge-pulse">v2.1.0 Ready</span>
+          <span class="badge badge-emerald">v2.2.0 • Zero Leakage</span>
         </div>
-        <p class="tagline">3 Machine Learning Models · 13,320 Historical Listings · Zero Preprocessing Leakage</p>
+        <p class="tagline">13,320 Cleaned Listings · 3 Benchmark Models · Fold-Local Pipelines</p>
       </div>
     </div>
 
-    <!-- Navigation Tabs -->
+    <!-- Navigation Tabs (Segmented Control) -->
     <nav class="nav-tabs" role="tablist" aria-label="Application views">
       <button class="nav-tab active" id="tab-predictor" role="tab" aria-selected="true" data-view="predictor">
-        <span class="tab-icon">🔮</span> Price Predictor
+        <span class="tab-icon">🔮</span>
+        <span>Price Predictor</span>
       </button>
       <button class="nav-tab" id="tab-api" role="tab" aria-selected="false" data-view="api">
-        <span class="tab-icon">⚡</span> Instant API Console
+        <span class="tab-icon">⚡</span>
+        <span>Instant API Console</span>
       </button>
       <button class="nav-tab" id="tab-metrics" role="tab" aria-selected="false" data-view="metrics">
-        <span class="tab-icon">📊</span> Model Performance
+        <span class="tab-icon">📊</span>
+        <span>Model Performance</span>
       </button>
-      <a class="nav-ext-link" href="/docs" target="_blank" rel="noopener" title="Open Swagger UI">
-        OpenAPI Docs ↗
+      <a class="nav-ext-link" href="/docs" target="_blank" rel="noopener" title="Open FastAPI Interactive OpenAPI Docs">
+        <span>OpenAPI Docs</span>
+        <span class="ext-arrow">↗</span>
       </a>
     </nav>
   </header>
@@ -46,19 +56,34 @@
         <div class="card form-card">
           <div class="card-header">
             <div>
-              <h2>Property Details</h2>
-              <p class="card-subtitle">Select or enter listing parameters</p>
+              <h2>Property Parameters</h2>
+              <p class="card-subtitle">Configure listing attributes to estimate market valuation</p>
             </div>
+            <span class="card-badge">Historical 2017–2020</span>
           </div>
 
-          <!-- Presets -->
+          <!-- Representative Historical Presets -->
           <div class="preset-section">
-            <span class="preset-label">Representative historical samples:</span>
+            <div class="preset-header">
+              <span class="preset-label">Historical Sample Presets:</span>
+            </div>
             <div class="preset-chips">
-              <button type="button" class="preset-btn" id="preset-whitefield">📍 2 BHK Whitefield</button>
-              <button type="button" class="preset-btn" id="preset-ecity">📍 3 BHK Electronic City</button>
-              <button type="button" class="preset-btn" id="preset-hsr">📍 1 BHK HSR Layout</button>
-              <button type="button" class="preset-btn" id="preset-indira">📍 4 BHK Indiranagar</button>
+              <button type="button" class="preset-btn" id="preset-whitefield">
+                <span class="chip-loc">Whitefield</span>
+                <span class="chip-detail">2 BHK · 1,200 sqft</span>
+              </button>
+              <button type="button" class="preset-btn" id="preset-ecity">
+                <span class="chip-loc">Electronic City</span>
+                <span class="chip-detail">3 BHK · 1,500 sqft</span>
+              </button>
+              <button type="button" class="preset-btn" id="preset-hsr">
+                <span class="chip-loc">HSR Layout</span>
+                <span class="chip-detail">1 BHK · 650 sqft</span>
+              </button>
+              <button type="button" class="preset-btn" id="preset-indira">
+                <span class="chip-loc">Indiranagar</span>
+                <span class="chip-detail">4 BHK · 3,200 sqft</span>
+              </button>
             </div>
           </div>
 
@@ -66,27 +91,33 @@
             <div class="form-grid">
               <div class="input-group">
                 <label for="area_type">Area Type</label>
-                <select id="area_type"></select>
+                <div class="select-wrapper">
+                  <select id="area_type"></select>
+                </div>
               </div>
 
               <div class="input-group">
-                <label for="location">Location</label>
-                <select id="location"></select>
+                <label for="location">Location / Locality</label>
+                <div class="select-wrapper">
+                  <select id="location"></select>
+                </div>
               </div>
 
               <div class="input-group">
-                <label for="bhk">Size (BHK)</label>
-                <select id="bhk"></select>
+                <label for="bhk">Property Size (BHK)</label>
+                <div class="select-wrapper">
+                  <select id="bhk"></select>
+                </div>
               </div>
 
               <div class="input-group">
                 <div class="label-with-val">
-                  <label for="total_sqft">Total Area</label>
+                  <label for="total_sqft">Total Built-up Area</label>
                   <span class="numeric-indicator" id="sqft-val">1,200 sqft</span>
                 </div>
                 <div class="range-and-number">
-                  <input id="total_sqft" type="number" min="100" max="10000" step="10" value="1200" />
-                  <input id="total_sqft_range" type="range" min="100" max="10000" step="50" value="1200" class="slider-input" />
+                  <input id="total_sqft" type="number" min="100" max="10000" step="10" value="1200" aria-label="Total square feet number" />
+                  <input id="total_sqft_range" type="range" min="100" max="10000" step="50" value="1200" class="slider-input" aria-label="Total square feet slider" />
                 </div>
               </div>
 
@@ -103,17 +134,19 @@
 
             <!-- Availability Toggle -->
             <div class="availability-card">
-              <span class="availability-title">Possession Status</span>
+              <div class="availability-header">
+                <span class="availability-title">Possession Status</span>
+              </div>
               <div class="availability-options">
                 <label class="radio-label">
                   <input type="radio" name="availability" value="ready" checked />
                   <span class="radio-custom"></span>
-                  Ready to Move
+                  <span class="radio-text">Ready to Move</span>
                 </label>
                 <label class="radio-label">
                   <input type="radio" name="availability" value="under" />
                   <span class="radio-custom"></span>
-                  Under Construction
+                  <span class="radio-text">Under Construction</span>
                 </label>
                 <div class="year-input-wrap" id="year-wrap">
                   <label for="year" class="micro-label">Completion Year</label>
@@ -130,12 +163,16 @@
 
             <!-- Model Selection Chips -->
             <div class="model-select-section">
-              <label class="section-label">Selected Regression Model</label>
+              <div class="section-label-row">
+                <label class="section-label">Selected Regression Algorithm</label>
+                <span class="section-hint">Trained on 70% split</span>
+              </div>
               <div id="model-chips" class="model-chips" role="radiogroup" aria-label="Model choice"></div>
             </div>
 
             <button id="predict-btn" class="btn-predict" type="button">
-              <span class="btn-icon">⚡</span> Calculate Estimated Price
+              <span class="btn-icon">⚡</span>
+              <span class="btn-text">Calculate Estimated Price</span>
             </button>
             <p id="form-error" class="error-banner" hidden></p>
           </form>
@@ -147,59 +184,69 @@
             <div class="empty-icon-wrap">
               <span class="empty-icon">📈</span>
             </div>
-            <h3>Estimate Appears Here</h3>
-            <p>Select your property attributes and click <strong>Calculate Estimated Price</strong> to evaluate across all three trained models side-by-side.</p>
+            <h3>Price Valuation Appears Here</h3>
+            <p>Select property specifications and click <strong>Calculate Estimated Price</strong> to evaluate across all three trained models side-by-side.</p>
             <div class="empty-hints">
               <span class="hint-pill">✔ Calibrated 80% error ranges</span>
               <span class="hint-pill">✔ Extrapolation detection</span>
-              <span class="hint-pill">✔ Fold-local preprocessing</span>
+              <span class="hint-pill">✔ Lakh / Crore automatic scaling</span>
             </div>
           </div>
 
           <div id="result-body" class="result-body" hidden>
             <div class="result-header">
-              <span class="result-badge" id="active-model-badge">Random Forest</span>
+              <div class="result-badge-group">
+                <span class="result-badge" id="active-model-badge">Random Forest</span>
+                <span class="coverage-pill">80% Calibrated</span>
+              </div>
               <span class="dataset-tag">Historical 2017–2020 Baseline</span>
             </div>
 
             <div class="price-hero">
-              <span class="price-prefix">Estimated Value</span>
+              <span class="price-prefix">Estimated Historical Value</span>
               <div class="price-display">
                 <span class="currency-symbol">₹</span>
-                <span class="price-num" id="price-lakh">–</span>
-                <span class="price-unit">Lakh</span>
+                <span class="price-num" id="price-num">–</span>
+                <span class="price-unit" id="price-unit">Lakh</span>
               </div>
-              <div class="price-subtext" id="price-inr">≈ ₹–</div>
+              <div class="price-subtext" id="price-subtext">≈ ₹–</div>
             </div>
 
             <!-- Historical Error Range Box -->
             <div id="error-range-box" class="info-callout range-box">
               <div class="callout-header">
-                <span class="callout-icon">📊</span>
-                <strong>Estimated Historical Error Range</strong>
+                <div class="callout-title-row">
+                  <span class="callout-icon">📊</span>
+                  <strong>Estimated Historical Error Range</strong>
+                </div>
                 <span class="coverage-badge">80% Test Coverage</span>
               </div>
-              <p class="range-val" id="error-range-val">₹– Lakh – ₹– Lakh</p>
-              <p class="range-note">Derived from out-of-fold cross-validation log-residuals on historical listings.</p>
+              <p class="range-val" id="error-range-val">₹– – ₹–</p>
+              <p class="range-note">Derived from out-of-fold cross-validation log-residuals (verified 80.6% test coverage).</p>
             </div>
 
             <!-- Extrapolation Warnings -->
             <div id="warnings-box" class="warning-callout" hidden>
               <div class="callout-header">
-                <span class="callout-icon">⚠️</span>
-                <strong>Out-of-Domain Notice</strong>
+                <div class="callout-title-row">
+                  <span class="callout-icon">⚠️</span>
+                  <strong>Out-of-Domain Notice</strong>
+                </div>
               </div>
               <ul id="warnings-list" class="warning-list"></ul>
             </div>
 
             <!-- Unseen Category Note -->
             <div id="unseen-note" class="info-callout note-box" hidden>
-              <p>ⓘ The specified society was absent from the training split. Frequency encoding assigned 0.0; prediction relies on structural features.</p>
+              <p>ⓘ The specified society was absent from training data. Frequency encoding assigned 0.0; prediction is anchored on structural features.</p>
             </div>
 
             <!-- Multi-Model Comparison Table -->
             <div class="comparison-section">
-              <h4>All Models on This Property</h4>
+              <div class="comparison-header">
+                <h4>All Models on This Property</h4>
+                <span class="comparison-sub">Side-by-side R² comparison</span>
+              </div>
               <div class="table-wrap">
                 <table class="model-table">
                   <thead>
@@ -232,25 +279,31 @@
               <p class="card-subtitle">Zero page-load REST explorer & live test harness</p>
             </div>
           </div>
-          <p class="api-intro">Test the FastAPI endpoints in real time directly from your browser. Click any endpoint below to inspect schema and send live requests.</p>
+          <p class="api-intro">Test the FastAPI backend endpoints directly in your browser. Click any endpoint below to inspect payload and dispatch live requests.</p>
           <div class="endpoint-nav">
             <button type="button" class="ep-btn active" data-ep="predict">
-              <span class="method-tag method-post">POST</span> /predict
+              <span class="method-tag method-post">POST</span>
+              <span class="ep-btn-path">/predict</span>
             </button>
             <button type="button" class="ep-btn" data-ep="models">
-              <span class="method-tag method-get">GET</span> /models
+              <span class="method-tag method-get">GET</span>
+              <span class="ep-btn-path">/models</span>
             </button>
             <button type="button" class="ep-btn" data-ep="locations">
-              <span class="method-tag method-get">GET</span> /locations
+              <span class="method-tag method-get">GET</span>
+              <span class="ep-btn-path">/locations</span>
             </button>
             <button type="button" class="ep-btn" data-ep="meta">
-              <span class="method-tag method-get">GET</span> /meta
+              <span class="method-tag method-get">GET</span>
+              <span class="ep-btn-path">/meta</span>
             </button>
             <button type="button" class="ep-btn" data-ep="manifest">
-              <span class="method-tag method-get">GET</span> /manifest
+              <span class="method-tag method-get">GET</span>
+              <span class="ep-btn-path">/manifest</span>
             </button>
             <button type="button" class="ep-btn" data-ep="health">
-              <span class="method-tag method-get">GET</span> /health
+              <span class="method-tag method-get">GET</span>
+              <span class="ep-btn-path">/health</span>
             </button>
           </div>
         </div>
@@ -261,24 +314,30 @@
               <span class="method-tag" id="ep-method">POST</span>
               <code class="endpoint-path" id="ep-path">/predict</code>
             </div>
-            <p class="endpoint-desc" id="ep-desc">Send house attributes to get price estimates, 80% error ranges, and domain diagnostics.</p>
+            <p class="endpoint-desc" id="ep-desc">Send house attributes to calculate price estimates, 80% error ranges, and domain diagnostics.</p>
           </div>
 
           <div id="ep-request-section">
-            <h4 class="subhead">Request Payload (JSON)</h4>
-            <textarea id="ep-payload" class="code-editor" rows="9"></textarea>
+            <div class="editor-header">
+              <h4 class="subhead">Request Payload (JSON)</h4>
+              <button type="button" class="btn-micro" id="btn-reset-payload">Reset Payload</button>
+            </div>
+            <textarea id="ep-payload" class="code-editor" rows="9" spellcheck="false"></textarea>
           </div>
 
           <div class="action-row">
             <button type="button" id="btn-send-api" class="btn-api-send">
-              ▶ Send Request
+              ▶ Send Live Request
             </button>
-            <span id="api-status-pill" class="status-pill" hidden>Status: 200 OK</span>
+            <span id="api-status-pill" class="status-pill" hidden>Status: 200 OK (38ms)</span>
           </div>
 
           <div class="response-section">
-            <h4 class="subhead">Live Server Response</h4>
-            <pre class="response-code"><code id="ep-response">Click "Send Request" to test this endpoint live...</code></pre>
+            <div class="response-header-row">
+              <h4 class="subhead">Backend JSON Response</h4>
+              <button type="button" class="btn-micro" id="btn-copy-response">Copy Response</button>
+            </div>
+            <pre class="response-code"><code id="ep-response">Click "Send Live Request" to test this endpoint live...</code></pre>
           </div>
         </div>
       </div>
@@ -287,27 +346,31 @@
     <!-- VIEW 3: MODEL PERFORMANCE -->
     <section id="view-metrics" class="view-panel" role="tabpanel" hidden>
       <div class="metrics-layout">
-        <!-- Overview Stats -->
+        <!-- Overview Stats Cards -->
         <div class="metric-cards-row">
           <div class="stat-card">
+            <div class="stat-icon">🌲</div>
             <span class="stat-num">0.787</span>
             <span class="stat-label">Random Forest Test R² (log)</span>
             <small class="stat-sub">Explains ~79% of price variance</small>
           </div>
           <div class="stat-card">
+            <div class="stat-icon">🔁</div>
             <span class="stat-num">0.779</span>
             <span class="stat-label">5-Fold CV R² (±0.007)</span>
             <small class="stat-sub">Strict fold-local preprocessing</small>
           </div>
           <div class="stat-card">
+            <div class="stat-icon">🎯</div>
             <span class="stat-num">₹11.07 L</span>
             <span class="stat-label">Median Absolute Error (MedAE)</span>
-            <small class="stat-sub">Robust to luxury skew</small>
+            <small class="stat-sub">Robust against luxury skew</small>
           </div>
           <div class="stat-card">
+            <div class="stat-icon">📐</div>
             <span class="stat-num">80.6%</span>
-            <span class="stat-label">Error Calibration Coverage</span>
-            <small class="stat-sub">Empirically verified on test set</small>
+            <span class="stat-label">Calibrated Error Coverage</span>
+            <small class="stat-sub">Empirically validated on hold-out</small>
           </div>
         </div>
 
@@ -316,8 +379,9 @@
           <div class="card-header">
             <div>
               <h2>Trained Models Evaluation Summary</h2>
-              <p class="card-subtitle">Comparison on 30% held-out test set (3,957 listings) & 5-fold cross-validation</p>
+              <p class="card-subtitle">Performance on 30% held-out test set (3,957 listings) & 5-fold cross-validation</p>
             </div>
+            <span class="card-badge">Strict Fold-Local</span>
           </div>
           <div class="table-wrap">
             <table class="model-table metrics-table" id="all-models-table">
@@ -342,7 +406,12 @@
         <!-- Methodology Cards -->
         <div class="methodology-grid">
           <div class="card">
-            <h3>Leakage Elimination Protocol</h3>
+            <div class="card-header">
+              <div>
+                <h3>Leakage Elimination Protocol</h3>
+                <p class="card-subtitle">Zero data contamination</p>
+              </div>
+            </div>
             <ul class="clean-list">
               <li><strong>Outer 70/30 Split:</strong> Split strictly precedes any learned feature preprocessing.</li>
               <li><strong>Fold-Local Encodings:</strong> BHK medians, location frequencies, and StandardScalers are fitted inside each CV fold slice.</li>
@@ -350,10 +419,15 @@
             </ul>
           </div>
           <div class="card">
-            <h3>Location-Grouped Stress Test</h3>
+            <div class="card-header">
+              <div>
+                <h3>Location-Grouped Stress Test</h3>
+                <p class="card-subtitle">Generalization to unseen localities</p>
+              </div>
+            </div>
             <ul class="clean-list">
               <li><strong>GroupKFold by Location:</strong> Evaluates models when predicting properties in entirely unseen localities.</li>
-              <li><strong>Random Forest Group-CV R²:</strong> 0.719 (demonstrating expected penalty when locality is novel).</li>
+              <li><strong>Random Forest Group-CV R²:</strong> 0.719 (expected realistic penalty when locality is novel).</li>
               <li><strong>Safety Guard:</strong> Unseen localities trigger explicit notices in the response.</li>
             </ul>
           </div>
@@ -362,11 +436,36 @@
     </section>
   </main>
 
-  <footer class="footer">
-    <p>
-      Bengaluru House Price Prediction · Trained on historical listings snapshot (2017–2020) ·
-      FastAPI v2.1.0 · Single-Page Web UI · Streamlit & Vercel
-    </p>
+  <!-- Modern Branded Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand-wrap">
+        <div class="footer-brand-badge">
+          <span class="footer-author-pill">ABu</span>
+          <div class="footer-text-block">
+            <p class="footer-copy">&copy; 2026 <strong>Basith AbuSyed</strong> (ABu). All rights reserved.</p>
+            <p class="footer-tagline">Bengaluru Real Estate Valuation Intelligence · Historical Model Benchmark (2017–2020)</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-actions">
+        <a class="footer-link" href="https://abufolio.vercel.app/" target="_blank" rel="noopener noreferrer">
+          <span class="footer-link-icon">💼</span>
+          <span>Portfolio</span>
+        </a>
+        <a class="footer-link" href="https://github.com/abustark/HOUSE-PRICE-PREDICTION-USING-MACHINE-LEARNING-ALGORITHMS" target="_blank" rel="noopener noreferrer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          <span>GitHub Repo</span>
+        </a>
+        <a class="footer-link" href="https://www.linkedin.com/in/bas-abu/" target="_blank" rel="noopener noreferrer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45z"/></svg>
+          <span>LinkedIn</span>
+        </a>
+        <button type="button" class="footer-link footer-top-btn" id="btn-back-to-top">
+          <span>↑ Back to Top</span>
+        </button>
+      </div>
+    </div>
   </footer>
 
   <script src="/static/app.js"></script>

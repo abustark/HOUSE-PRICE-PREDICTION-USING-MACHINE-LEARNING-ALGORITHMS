@@ -1,12 +1,12 @@
-/* Bengaluru House Price Prediction — Modern SPA Client
+/* Bengaluru House Price Prediction — Minimalist Editorial Client
+   Inspired by CoverCraft (coverltr.vercel.app) & Abufolio
    Features:
-   - Automatic Lakh / Crore Scaling (>= 100 Lakh -> Crore format, e.g. ₹1.86 Cr)
-   - Instant In-App API Console & Explorer (zero full page reload)
-   - Synchronized Range Slider + Number Inputs
-   - Domain Extrapolation Warning Diagnostics
-   - Historical Calibrated Error Ranges (80% test coverage)
-   - Multi-Model Performance Comparison View
-   - Responsive Touch Targets & Smooth Navigation
+   - Automatic Lakh / Crore Financial Scaling (>= 100 Lakh -> Crore format, e.g. ₹1.86 Cr)
+   - Zero-Reload In-App API Console & Live Request Dispatcher
+   - Synchronized Total Sqft Number Input & Smooth Range Slider
+   - Domain Extrapolation Warning Diagnostics & Unseen Categories Handling
+   - Calibrated 80% Error Intervals & Side-by-Side Model Cross-Check
+   - Smooth Mobile Scroll and Responsive View Switching
 */
 
 const $ = (id) => document.getElementById(id);
@@ -101,10 +101,10 @@ function fillSelect(el, items, selectedVal) {
 }
 
 // ---------------------------------------------------------------------------
-// Tab Navigation
+// Tab Navigation (Segmented View Switcher)
 // ---------------------------------------------------------------------------
 function initTabs() {
-  const tabs = document.querySelectorAll(".nav-tab");
+  const tabs = document.querySelectorAll(".nav-btn");
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       tabs.forEach((t) => {
@@ -133,7 +133,7 @@ function initTabs() {
 }
 
 // ---------------------------------------------------------------------------
-// Model Chips
+// Model Selection Chips
 // ---------------------------------------------------------------------------
 function renderModelChips() {
   const container = $("model-chips");
@@ -147,25 +147,14 @@ function renderModelChips() {
     btn.setAttribute("role", "radio");
     btn.setAttribute("aria-checked", String(m.key === appData.selectedModel));
 
-    const titleRow = document.createElement("div");
-    titleRow.className = "chip-top-row";
-
     const name = document.createElement("span");
     name.className = "chip-name";
     name.textContent = m.name;
-    titleRow.appendChild(name);
-
-    if (m.key === appData.bestModel) {
-      const tag = document.createElement("span");
-      tag.className = "best-tag";
-      tag.textContent = "Selected";
-      titleRow.appendChild(tag);
-    }
-    btn.appendChild(titleRow);
+    btn.appendChild(name);
 
     const r2 = document.createElement("small");
     r2.className = "chip-stat";
-    r2.textContent = `Test R² ${m.r2_log.toFixed(3)}`;
+    r2.textContent = `R² ${m.r2_log.toFixed(3)}`;
     btn.appendChild(r2);
 
     btn.addEventListener("click", () => {
@@ -178,7 +167,7 @@ function renderModelChips() {
 }
 
 // ---------------------------------------------------------------------------
-// Two-Way Sync for Sqft Slider & Input
+// Synchronized Range Slider & Number Input
 // ---------------------------------------------------------------------------
 function initSqftSync() {
   const numInput = $("total_sqft");
@@ -198,7 +187,7 @@ function initSqftSync() {
 }
 
 // ---------------------------------------------------------------------------
-// Presets
+// Historical Presets
 // ---------------------------------------------------------------------------
 function setPreset(area, loc, bhk, sqft, bath, balc) {
   $("area_type").value = area;
@@ -229,7 +218,7 @@ function initPresets() {
 }
 
 // ---------------------------------------------------------------------------
-// Prediction Handler
+// Prediction Handler & Valuation Rendering
 // ---------------------------------------------------------------------------
 function readFormData() {
   const under = document.querySelector('input[name="availability"]:checked').value === "under";
@@ -264,7 +253,7 @@ function renderPredictionResult(data) {
   // Subtext: show approx INR and Lakh equivalent if formatted in Crore
   let subtext = `≈ ₹${fmtInr(data.predicted_price_inr)}`;
   if (breakdown.unit === "Cr") {
-    subtext += ` (${breakdown.altStr})`;
+    subtext += ` · (${breakdown.altStr})`;
   }
   $("price-subtext").textContent = subtext;
   $("active-model-badge").textContent = data.model_name || data.model;
@@ -298,7 +287,7 @@ function renderPredictionResult(data) {
   // Unseen society note
   $("unseen-note").hidden = !data.unseen_society;
 
-  // Comparison table
+  // Side-by-side comparison table
   const tbody = $("compare-rows");
   tbody.innerHTML = "";
   for (const m of appData.models) {
@@ -310,15 +299,15 @@ function renderPredictionResult(data) {
     // Format each model's estimate with Crore/Lakh scaling
     const modelPrice = formatPrice(entry.price_lakh);
     tr.innerHTML = `
-      <td><strong>${m.name}</strong> ${m.key === data.model_key ? '<span class="selected-pill">Active</span>' : ''}</td>
-      <td class="align-right monospaced-num">${modelPrice}</td>
-      <td class="align-right monospaced-num">${m.r2_log.toFixed(3)}</td>
+      <td>${m.name}</td>
+      <td class="text-right">${modelPrice}</td>
+      <td class="text-right">${m.r2_log.toFixed(3)}</td>
     `;
     tbody.appendChild(tr);
   }
 
   // Mobile convenience: scroll smoothly to result if on small viewport
-  if (window.innerWidth <= 840) {
+  if (window.innerWidth <= 920) {
     $("result-container")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 }
@@ -327,7 +316,7 @@ async function handlePredict() {
   showFormError("");
   const btn = $("predict-btn");
   btn.disabled = true;
-  btn.innerHTML = `<span class="btn-icon">⏳</span> Computing Prediction…`;
+  btn.innerHTML = `<span>Calculating Valuation…</span>`;
 
   try {
     const payload = readFormData();
@@ -353,7 +342,7 @@ async function handlePredict() {
     showFormError(err.message || String(err));
   } finally {
     btn.disabled = false;
-    btn.innerHTML = `<span class="btn-icon">⚡</span> Calculate Estimated Price`;
+    btn.innerHTML = `<span>Calculate Estimated Valuation</span><span class="btn-arrow">→</span>`;
   }
 }
 
@@ -417,7 +406,7 @@ const API_ENDPOINTS = {
 let currentEndpointKey = "predict";
 
 function initApiConsole() {
-  const epBtns = document.querySelectorAll(".ep-btn");
+  const epBtns = document.querySelectorAll(".ep-nav-pill");
   epBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
       epBtns.forEach((b) => b.classList.remove("active"));
@@ -458,7 +447,7 @@ function selectEndpoint(key) {
 
   const methodTag = $("ep-method");
   methodTag.textContent = ep.method;
-  methodTag.className = `method-tag method-${ep.method.toLowerCase()}`;
+  methodTag.className = `pill-method ${ep.method.toLowerCase()}`;
 
   $("ep-path").textContent = ep.path;
   $("ep-desc").textContent = ep.desc;
@@ -482,9 +471,9 @@ async function sendApiRequest() {
   const responseBox = $("ep-response");
 
   sendBtn.disabled = true;
-  sendBtn.textContent = "Invoking…";
+  sendBtn.innerHTML = `<span>Invoking…</span>`;
   statusPill.hidden = true;
-  responseBox.textContent = "Sending request to FastAPI backend…";
+  responseBox.textContent = "Dispatching request to FastAPI backend…";
 
   try {
     const options = { method: ep.method };
@@ -500,19 +489,20 @@ async function sendApiRequest() {
 
     statusPill.hidden = false;
     statusPill.textContent = `Status: ${res.status} ${res.statusText || (res.ok ? "OK" : "Error")} (${ms}ms)`;
-    statusPill.style.color = res.ok ? "var(--accent)" : "var(--danger)";
-    statusPill.style.background = res.ok ? "var(--accent-subtle)" : "var(--danger-bg)";
-    statusPill.style.borderColor = res.ok ? "var(--line-strong)" : "rgba(248, 113, 113, 0.35)";
+    statusPill.style.color = res.ok ? "var(--status-emerald)" : "var(--status-rose)";
+    statusPill.style.background = res.ok ? "var(--status-emerald-bg)" : "var(--status-rose-bg)";
+    statusPill.style.border = res.ok ? "1px solid rgba(16, 185, 129, 0.3)" : "1px solid rgba(244, 63, 94, 0.3)";
 
     responseBox.textContent = JSON.stringify(data, null, 2);
   } catch (err) {
     statusPill.hidden = false;
     statusPill.textContent = "Network Error";
-    statusPill.style.color = "var(--danger)";
+    statusPill.style.color = "var(--status-rose)";
+    statusPill.style.background = "var(--status-rose-bg)";
     responseBox.textContent = `Error: ${err.message || String(err)}`;
   } finally {
     sendBtn.disabled = false;
-    sendBtn.textContent = "▶ Send Live Request";
+    sendBtn.innerHTML = `<span>Send Live Request</span><span>→</span>`;
   }
 }
 
@@ -529,13 +519,13 @@ function populateMetricsTable() {
     if (m.key === appData.bestModel) tr.className = "highlight";
     
     tr.innerHTML = `
-      <td><strong>${m.name}</strong> ${m.key === appData.bestModel ? '<span class="best-tag">Selected</span>' : ""}</td>
-      <td class="monospaced-num">${m.r2_log.toFixed(3)}</td>
-      <td class="monospaced-num">${m.mae_log.toFixed(3)}</td>
-      <td class="monospaced-num">${formatPrice(m.mae_lakh)}</td>
-      <td class="monospaced-num">${formatPrice(m.medae_lakh)}</td>
-      <td class="monospaced-num">${formatPrice(m.rmse_lakh)}</td>
-      <td class="monospaced-num">${m.cv_r2_log_mean.toFixed(3)} (±${m.cv_r2_log_std.toFixed(3)})</td>
+      <td><strong>${m.name}</strong> ${m.key === appData.bestModel ? '<span class="meta-tag active-model-tag">Best</span>' : ""}</td>
+      <td class="text-right">${m.r2_log.toFixed(3)}</td>
+      <td class="text-right">${m.mae_log.toFixed(3)}</td>
+      <td class="text-right">${formatPrice(m.mae_lakh)}</td>
+      <td class="text-right">${formatPrice(m.medae_lakh)}</td>
+      <td class="text-right">${formatPrice(m.rmse_lakh)}</td>
+      <td class="text-right">${m.cv_r2_log_mean.toFixed(3)} (±${m.cv_r2_log_std.toFixed(3)})</td>
     `;
     tbody.appendChild(tr);
   }

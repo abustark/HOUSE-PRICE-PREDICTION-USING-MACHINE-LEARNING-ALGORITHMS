@@ -13,7 +13,7 @@
       <span class="brand-icon">🏡</span>
       <div>
         <h1>Bengaluru House Price Prediction</h1>
-        <p class="tagline">Three ML models · 13,320 listings · prices in Lakh INR</p>
+        <p class="tagline">Three ML models · 13,320 listings · Historical 2017–2020 dataset</p>
       </div>
     </div>
     <a class="api-link" href="/docs" target="_blank" rel="noopener">API docs ↗</a>
@@ -22,6 +22,15 @@
   <main class="layout">
     <section class="card form-card" aria-label="House details">
       <h2>House details</h2>
+
+      <div class="presets" style="margin-bottom: 1rem;">
+        <span style="font-size: 0.82rem; color: #8fa0c7; display: block; margin-bottom: 0.4rem;">Sample historical listings:</span>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button type="button" class="chip" id="preset-whitefield" style="padding: 4px 8px; font-size: 0.78rem;">2 BHK Whitefield</button>
+          <button type="button" class="chip" id="preset-ecity" style="padding: 4px 8px; font-size: 0.78rem;">3 BHK Electronic City</button>
+          <button type="button" class="chip" id="preset-hsr" style="padding: 4px 8px; font-size: 0.78rem;">1 BHK HSR Layout</button>
+        </div>
+      </div>
 
       <div class="grid">
         <label>Area type
@@ -34,10 +43,10 @@
           <select id="bhk"></select>
         </label>
         <label>Total area (sqft)
-          <input id="total_sqft" type="number" min="100" max="20000" step="10" value="1200" />
+          <input id="total_sqft" type="number" min="100" max="10000" step="10" value="1200" />
         </label>
         <label>Bathrooms
-          <input id="bath" type="number" min="0" max="10" value="2" />
+          <input id="bath" type="number" min="1" max="12" value="2" />
         </label>
         <label>Balconies
           <input id="balcony" type="number" min="0" max="5" value="1" />
@@ -74,7 +83,7 @@
         <div class="empty-icon">📊</div>
         <h2>Your prediction appears here</h2>
         <p>Fill in the house details and press <strong>Predict price</strong>.<br />
-        All three models score every input, so you can compare them side by side.</p>
+        All three models score every input, with historical error ranges and domain warnings.</p>
       </div>
 
       <div id="result-body" hidden>
@@ -82,6 +91,16 @@
         <p class="price"><span id="price-lakh">–</span> <span class="price-unit">Lakh</span></p>
         <p class="price-inr" id="price-inr">–</p>
         <p class="result-model" id="result-model">–</p>
+
+        <div id="error-range-box" style="margin: 0.8rem 0; padding: 0.6rem 0.8rem; background: rgba(79, 124, 255, 0.08); border-left: 3px solid #4f7cff; border-radius: 4px; font-size: 0.85rem;">
+          <strong id="error-range-label">Historical Error Range (80% coverage):</strong>
+          <span id="error-range-val" style="display: block; margin-top: 2px;">–</span>
+        </div>
+
+        <div id="warnings-box" style="margin: 0.8rem 0; padding: 0.6rem 0.8rem; background: rgba(255, 171, 0, 0.1); border-left: 3px solid #ffab00; border-radius: 4px; font-size: 0.83rem; color: #ffcc00;" hidden>
+          <strong>⚠️ Extrapolation Warnings:</strong>
+          <ul id="warnings-list" style="margin: 4px 0 0 1.2rem; padding: 0;"></ul>
+        </div>
 
         <h3>All models on this input</h3>
         <table class="compare-table">
@@ -92,8 +111,7 @@
         </table>
 
         <p id="unseen-note" class="note" hidden>
-          ⓘ The society name was not in the training data, so it was treated as
-          an unseen society and the other features carried the prediction.
+          ⓘ The society name was not in the training data, so frequency encoding assigned 0.0. The other features carried the prediction.
         </p>
       </div>
     </section>
@@ -101,8 +119,8 @@
 
   <footer class="footer">
     <p>
-      Trained on a 2017–2020 snapshot of Bengaluru listings (Kaggle, CC0).
-      Predictions are estimates, not market quotes.
+      Trained on a 2017–2020 historical snapshot of Bengaluru listings (Kaggle, CC0).
+      Predictions are statistical educational estimates, not professional property appraisals or current market feeds.
     </p>
   </footer>
 

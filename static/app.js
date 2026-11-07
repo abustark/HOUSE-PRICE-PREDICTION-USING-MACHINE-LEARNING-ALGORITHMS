@@ -80,6 +80,17 @@ function readForm() {
   };
 }
 
+function setPreset(area, loc, bhk, sqft, bath, balc) {
+  $("area_type").value = area;
+  $("location").value = loc;
+  $("bhk").value = String(bhk);
+  $("total_sqft").value = String(sqft);
+  $("bath").value = String(bath);
+  $("balcony").value = String(balc);
+  document.querySelector('input[name="availability"][value="ready"]').checked = true;
+  $("year").disabled = true;
+}
+
 function showError(msg) {
   const el = $("form-error");
   el.textContent = msg;
@@ -93,7 +104,31 @@ function renderResult(data) {
   $("price-lakh").textContent = fmtLakh(data.predicted_price_lakh);
   $("price-inr").textContent = `≈ ${fmtInr(data.predicted_price_inr)}`;
   const chosen = modelsInfo.find((m) => m.key === data.model_key);
-  $("result-model").textContent = `Model: ${data.model} · R² (log) ${chosen ? chosen.r2_log.toFixed(3) : ""}`;
+  $("result-model").textContent = `Model: ${data.model_name || data.model} · R² (log) ${chosen ? chosen.r2_log.toFixed(3) : ""}`;
+
+  // Historical error range
+  if (data.historical_error_range) {
+    const range = data.historical_error_range;
+    $("error-range-box").hidden = false;
+    $("error-range-val").textContent = `₹${fmtLakh(range.lower_lakh)} Lakh – ₹${fmtLakh(range.upper_lakh)} Lakh (based on historical CV residuals)`;
+  } else {
+    $("error-range-box").hidden = true;
+  }
+
+  // Warnings
+  const warnBox = $("warnings-box");
+  const warnList = $("warnings-list");
+  warnList.innerHTML = "";
+  if (data.warnings && data.warnings.length > 0) {
+    warnBox.hidden = false;
+    for (const w of data.warnings) {
+      const li = document.createElement("li");
+      li.textContent = w;
+      warnList.appendChild(li);
+    }
+  } else {
+    warnBox.hidden = true;
+  }
 
   const tbody = $("compare-rows");
   tbody.innerHTML = "";
@@ -124,7 +159,19 @@ async function predict() {
       body: JSON.stringify(payload),
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.detail || `request failed (${res.status})`);
+    if (!res.ok) {
+      let errMsg = `Request failed (${res.status})`;
+      if (data.detail) {
+        if (typeof data.detail === "string") {
+          errMsg = data.detail;
+        } else if (data.detail.errors) {
+          errMsg = data.detail.errors.join("; ");
+        } else if (Array.isArray(data.detail)) {
+          errMsg = data.detail.map((d) => d.msg || JSON.stringify(d)).join("; ");
+        }
+      }
+      throw new Error(errMsg);
+    }
     renderResult(data);
   } catch (err) {
     showError(String(err.message || err));
@@ -144,7 +191,7 @@ async function init() {
   bestModel = models.best_model;
   selectedModel = bestModel;
 
-  fillSelect($("area_type"), meta.area_types);
+  fillSelect($("area_type"), meta.supported_area_types || meta.area_types);
   fillSelect($("location"), locations.locations);
   fillSelect(
     $("bhk"),
@@ -158,11 +205,22 @@ async function init() {
 
   document.querySelectorAll('input[name="availability"]').forEach((r) =>
     r.addEventListener("change", () => {
-      $("year").disabled = r.value === "ready" && !r.checked;
       const under = document.querySelector('input[name="availability"]:checked').value === "under";
       $("year").disabled = !under;
     })
   );
+
+  // Preset buttons
+  $("preset-whitefield")?.addEventListener("click", () =>
+    setPreset("Super built-up Area", "Whitefield", 2, 1200, 2, 1)
+  );
+  $("preset-ecity")?.addEventListener("click", () =>
+    setPreset("Super built-up Area", "Electronic City", 3, 1500, 3, 2)
+  );
+  $("preset-hsr")?.addEventListener("click", () =>
+    setPreset("Built-up Area", "HSR Layout", 1, 650, 1, 1)
+  );
+
   $("predict-btn").addEventListener("click", predict);
 }
 

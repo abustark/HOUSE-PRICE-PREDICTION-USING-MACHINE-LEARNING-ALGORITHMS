@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-11-07T11:21:16.956999",
+  "schema_version": "2.1.0",
+  "dataset_sha256": "e489a65d96854ad76c32e872174673e9aa6cbb98e2087b4690398762a8b8fd8d",
+  "split_seed": 2,
+  "test_size": 0.3,
+  "n_train": 9231,
+  "n_test": 3957,
+  "n_dropped": 132,
+  "bhk_median": 3,
+  "feature_order": [
+    "total_sqft",
+    "bath",
+    "balcony",
+    "bhk",
+    "area_type",
+    "completion_year",
+    "location",
+    "society"
+  ],
+  "models_summary": {
+    "linear": {
+      "name": "Linear Regression",
+      "test_r2_log": 0.633,
+      "test_mae_lakh": 41.39
+    },
+    "ridge": {
+      "name": "Ridge Regression",
+      "test_r2_log": 0.633,
+      "test_mae_lakh": 41.39
+    },
+    "random_forest": {
+      "name": "Random Forest",
+      "test_r2_log": 0.787,
+      "test_mae_lakh": 29.32
+    }
+  }
+}

@@ -1,20 +1,24 @@
 {
-  "created": "2026-09-21 05:42",
+  "created": "2026-11-07 11:21",
+  "schema_version": "2.1.0",
   "dataset": {
     "file": "data/Bengaluru_House_Data.csv",
+    "sha256": "e489a65d96854ad76c32e872174673e9aa6cbb98e2087b4690398762a8b8fd8d",
     "source": "https://www.kaggle.com/amitabhajoy/bengaluru-house-price-data",
+    "snapshot_years": "2017-2020",
     "rows": 13320,
     "columns": 9
   },
   "split": {
-    "train": 9282,
-    "test": 3979,
+    "train": 9231,
+    "test": 3957,
     "test_size": 0.3,
-    "random_state": 2
+    "random_state": 2,
+    "method": "Leakage-free train_test_split; fold-local preprocessing in CV"
   },
   "target": "price (Lakh INR)",
-  "target_transform": "log1p (predictions inverted before scoring)",
-  "rows_dropped": 59,
+  "target_transform": "log1p (predictions inverted back to Lakh INR via expm1)",
+  "rows_dropped": 132,
   "features": [
     "total_sqft",
     "bath",
@@ -25,21 +29,69 @@
     "location",
     "society"
   ],
+  "supported_area_types": [
+    "Built-up Area",
+    "Carpet Area",
+    "Plot Area",
+    "Super built-up Area"
+  ],
+  "best_model": "random_forest",
+  "error_calibration": {
+    "method": "Empirical quantile of out-of-fold CV log residuals",
+    "nominal_coverage": 0.8,
+    "log_margin": 0.366,
+    "test_coverage": 0.8064,
+    "interpretation": "Reflects historical error dispersion on 2017-2020 listing records. Not a current market uncertainty estimate."
+  },
+  "permutation_importance": {
+    "total_sqft": 0.9601,
+    "bath": 0.126,
+    "balcony": 0.0131,
+    "bhk": 0.063,
+    "area_type": 0.0502,
+    "completion_year": 0.0148,
+    "location": 0.0333,
+    "society": 0.0293
+  },
+  "location_grouped_stress_test": {
+    "description": "5-fold GroupKFold by location to evaluate generalization to entirely unseen localities",
+    "models": {
+      "linear": {
+        "r2_log_mean": 0.618,
+        "r2_log_std": 0.027,
+        "mae_log_mean": 0.322,
+        "mae_log_std": 0.013
+      },
+      "ridge": {
+        "r2_log_mean": 0.618,
+        "r2_log_std": 0.027,
+        "mae_log_mean": 0.322,
+        "mae_log_std": 0.013
+      },
+      "random_forest": {
+        "r2_log_mean": 0.719,
+        "r2_log_std": 0.024,
+        "mae_log_mean": 0.281,
+        "mae_log_std": 0.006
+      }
+    }
+  },
   "models": {
     "linear": {
       "name": "Linear Regression",
       "params": {},
       "test": {
-        "r2_log": 0.644,
-        "mae_log": 0.317,
-        "mae": 44.8,
-        "rmse": 173.03
+        "r2_log": 0.633,
+        "mae_log": 0.315,
+        "mae": 41.39,
+        "medae": 16.85,
+        "rmse": 133.67
       },
       "cv": {
-        "mae_log_mean": 0.32,
-        "mae_log_std": 0.005,
-        "r2_log_mean": 0.623,
-        "r2_log_std": 0.033
+        "r2_log_mean": 0.63,
+        "r2_log_std": 0.014,
+        "mae_log_mean": 0.319,
+        "mae_log_std": 0.007
       }
     },
     "ridge": {
@@ -48,16 +100,17 @@
         "alpha": 0.1
       },
       "test": {
-        "r2_log": 0.644,
-        "mae_log": 0.317,
-        "mae": 44.8,
-        "rmse": 173.02
+        "r2_log": 0.633,
+        "mae_log": 0.315,
+        "mae": 41.39,
+        "medae": 16.85,
+        "rmse": 133.67
       },
       "cv": {
-        "mae_log_mean": 0.32,
-        "mae_log_std": 0.005,
-        "r2_log_mean": 0.623,
-        "r2_log_std": 0.033
+        "r2_log_mean": 0.63,
+        "r2_log_std": 0.014,
+        "mae_log_mean": 0.319,
+        "mae_log_std": 0.007
       }
     },
     "random_forest": {
@@ -68,17 +121,17 @@
       },
       "test": {
         "r2_log": 0.787,
-        "mae_log": 0.231,
-        "mae": 31.41,
-        "rmse": 89.35
+        "mae_log": 0.224,
+        "mae": 29.32,
+        "medae": 11.07,
+        "rmse": 80.83
       },
       "cv": {
-        "mae_log_mean": 0.231,
-        "mae_log_std": 0.002,
-        "r2_log_mean": 0.776,
-        "r2_log_std": 0.014
+        "r2_log_mean": 0.779,
+        "r2_log_std": 0.007,
+        "mae_log_mean": 0.234,
+        "mae_log_std": 0.006
       }
     }
-  },
-  "best_model": "random_forest"
+  }
 }

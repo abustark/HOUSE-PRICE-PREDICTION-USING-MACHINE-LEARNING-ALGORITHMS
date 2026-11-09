@@ -10,6 +10,10 @@ st.markdown(
     """
     **Final year MCA project** by **Basith AbuSyed** — The American College.
 
+    - 🌐 **Primary Live Web App & REST API:** [hpp-flax.vercel.app](https://hpp-flax.vercel.app/)
+    - 📦 **GitHub Repository:** [abustark/HOUSE-PRICE-PREDICTION-USING-MACHINE-LEARNING-ALGORITHMS](https://github.com/abustark/HOUSE-PRICE-PREDICTION-USING-MACHINE-LEARNING-ALGORITHMS)
+    - 💼 **Portfolio:** [abufolio.vercel.app](https://abufolio.vercel.app/)
+
     This project predicts the price of a house in Bengaluru from its basic
     details using machine learning. Three regression models are trained and
     compared with strictly fold-local preprocessing to ensure zero data leakage:
@@ -21,7 +25,8 @@ st.markdown(
        capturing non-linear interactions across spatial and structural features.
 
     The Streamlit app lets you compare all three models side-by-side with
-    calibrated historical error ranges and domain extrapolation warnings.
+    calibrated historical error ranges and domain extrapolation warnings. The primary
+    production interface is available at [hpp-flax.vercel.app](https://hpp-flax.vercel.app/).
     """
 )
 

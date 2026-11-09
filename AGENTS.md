@@ -20,3 +20,15 @@ These rules are mandatory for any AI agent working in this repository.
 2. Update files / write code / fix bugs as asked.
 3. Optionally offer — in the response text — to run or test the changes.
 4. Stop and wait for the user's acknowledgment before running anything.
+
+---
+
+## Architectural Guidelines & Source of Truth
+
+- **Canonical Knowledge Base:** [`PROJECT-INFO.md`](PROJECT-INFO.md) is the single source of truth for all system architecture, metrics ($R^2 = 0.787$), feature constraints, and tech stacks. Always consult it before modifying core modeling or schema logic.
+- **Primary Live Production URL:** **`https://hpp-flax.vercel.app/`** (FastAPI serverless backend + vanilla SPA on Vercel).
+- **Secondary Live URL:** **`https://house-price-prediction-using-machine-learning-algorithms-9qccn.streamlit.app/`** (Streamlit 4-page exploratory dashboard).
+- **UI Architecture (v2.3.1):** Studio Slate & Cyber Indigo technical workbench aesthetic with in-app Light/Dark theme toggle (`localStorage` persistence).
+- **Universal Responsive Design:** All layouts must strictly follow the 4-tier responsive system ($\le 1100\text{px}$, $\le 960\text{px}$, $\le 768\text{px}$, $\le 520\text{px}$) using fluid `minmax(0, 1fr)` grid tracks and zero horizontal overflow (`overflow-x: hidden`).
+- **Mobile Usability:** Form inputs and selects must enforce `font-size: 16px` on mobile viewports to prevent iOS auto-zoom, and touch targets must remain $\ge 38\text{px}$.
+- **Static Asset Cache Invalidation:** Whenever updating `static/style.css` or `static/app.js`, update the query version strings (`?v=X.X.X`) in `static/index.html` to guarantee instant client-side cache refresh upon deployment.

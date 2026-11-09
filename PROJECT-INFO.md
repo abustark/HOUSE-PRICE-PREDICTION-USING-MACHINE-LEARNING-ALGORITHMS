@@ -16,7 +16,7 @@
 | **Secondary Live URL** | **https://house-price-prediction-using-machine-learning-algorithms-9qccn.streamlit.app/** (4-page Streamlit Dashboard) |
 | **Source Repository** | **https://github.com/abustark/HOUSE-PRICE-PREDICTION-USING-MACHINE-LEARNING-ALGORITHMS** |
 | **Author** | **Basith AbuSyed** (`ABu`, GitHub: [`abustark`](https://github.com/abustark)) — Final-Year MCA, The American College |
-| **Current Version** | **v2.2.0** (FastAPI backend + minimalist editorial UI + Lakh/Crore auto-scaling + instant API console) |
+| **Current Version** | **v2.3.1** (FastAPI backend + Studio Slate & Cyber Indigo UI + Light/Dark toggle + 4-tier responsive architecture + Lakh/Crore auto-scaling + instant API console) |
 | **Dataset License** | CC0: Public Domain (Amitabha Roy / Kaggle) |
 | **Build & CI Status** | Maintained, GitHub Actions CI Green, 35/35 Pytest passing, Playwright E2E verified |
 
@@ -31,20 +31,30 @@
 
 The Vercel-deployed application at **https://hpp-flax.vercel.app** serves as the **primary production entry point** of this repository.
 
-### Visual & Interaction Architecture
-- **Aesthetic Direction:** Minimalist editorial design language inspired by CoverCraft (`coverltr.vercel.app`) and `abufolio`, built with pure vanilla HTML5, modern CSS3, and ES2022 JavaScript. Zero frontend framework overhead, zero external CDN dependencies, and zero bundle bloat.
-- **Color System:** Warm stone and obsidian canvas (`#0c0a09`, `#141210`, `#1a1715`) accented with hairline borders (`rgba(255, 255, 255, 0.08)`), muted typography (`#a8a29e`), and warm gold/bronze badges (`#cfae77`, `#bc9250`).
-- **Typography:**
-  - `Instrument Sans` — Clean, legible modern sans-serif body.
-  - `Newsreader` — Editorial italic serif accents for key headings and titles.
-  - `Space Grotesk` — High-contrast monospace-inspired geometric display numerals.
-  - `JetBrains Mono` — Code blocks, metric tables, and live API console output.
-- **Floating Island Navigation:** Sticky architectural header (`header-floating`) featuring the `HP` monogram, version pill (`v2.2.0`), segmented tab navigation with active dot indicator, and a direct link to the OpenAPI `/docs` specification.
+### Visual & Interaction Architecture (v2.3.1 Studio Slate & Cyber Indigo Workbench)
+- **Aesthetic Direction:** High-precision Machine Learning Studio workbench inspired by modern developer products (Linear, CoverCraft, abufolio), engineered with pure vanilla HTML5, modern CSS3, and ES2022 JavaScript. Zero frontend framework overhead, zero external CDN dependencies, and zero bundle bloat.
+- **Color System (Studio Slate & Cyber Indigo):**
+  - *Dark Mode Canvas:* Deep midnight slate canvas (`#0a0e17`) with elevated slate-blue cards (`#131c2e`, `#1e293b`), hairline borders (`rgba(99, 102, 241, 0.22)`), glowing Cyber Cyan highlights (`#38bdf8`), and Electric Indigo buttons (`#4f46e5` / `#6366f1`).
+  - *Light Mode Canvas:* Crisp architectural studio slate daylight canvas (`#f1f5f9`) with porcelain cards (`#ffffff`, `#f8fafc`), deep indigo accents (`#4f46e5`), and slate typography (`#0f172a`, `#475569`).
+  - *In-App Theme Toggle:* Interactive Sun/Moon toggle (`#theme-toggle`) in floating header, automatically syncing with system preferences and persisting user choice in `localStorage`.
+- **Typography & Hierarchy:**
+  - `Instrument Sans` — Clean, legible modern sans-serif body and form controls.
+  - `Space Grotesk` — High-contrast geometric display numerals for valuation numbers and bento metrics.
+  - `JetBrains Mono` — Code blocks, metric tables, API payloads, and version badges.
+  - *Hero Title:* High-contrast sans-serif headline with radiant Cyber Cyan → Electric Indigo gradient accent (`linear-gradient(135deg, #38bdf8 0%, #818cf8 100%)`).
+- **Floating Island Navigation:** Sticky architectural glass header (`header-floating`) featuring the `HP` gradient monogram, version pill (`v2.2`), segmented tab navigation with active dot indicator, secondary Streamlit badge, theme toggle, and direct link to the OpenAPI `/docs` specification.
+- **Universal 4-Tier Responsive Architecture:**
+  - *Tier 1: Desktop / Ultrawide ($> 1100\text{px}$):* Balanced 2-column predictor grid (`1.15fr : 0.85fr`), 4-column Bento metrics.
+  - *Tier 2: Side-Panel / Split-Screen IDE ($\le 960\text{px}$):* Smoothly reflows into a single-column stacked layout; header taglines compact to prevent wrapping.
+  - *Tier 3: Tablets ($\le 768\text{px}$):* Two-tier navigation header with full-width segmented tab pills, single-column form fields, and 2×2 metric grids.
+  - *Tier 4: Mobile Phones ($\le 520\text{px}$):* Compact card padding, single-column bento metrics, 2×2 grid presets, fluid price scaling (`clamp(34px, 8vw, 44px)`), and iOS auto-zoom prevention (`16px` font size on inputs).
+  - *Zero Overflow:* Enforced `overflow-x: hidden; width: 100%; max-width: 100vw;` across all elements.
+- **Upgraded Bento Metric Cards:** 4 high-contrast evaluation cards featuring distinct glowing top indicators, category badges (`★ Top Pick`, `5-Fold`, `MedAE`, `80% Interval`), 32px tabular monospace figures, and hover elevation.
 - **Automatic Lakh / Crore Financial Scaling:**
   - If predicted value $\ge 100\text{ Lakh}$, the UI formats the price in **Crores** (e.g., $186.20\text{ Lakh} \to \text{₹1.86 Cr}$) with full rupee equivalent ($\approx \text{₹1,86,20,000}$).
   - If predicted value $< 100\text{ Lakh}$, the UI retains standard **Lakhs** (e.g., $\text{₹50.43 Lakh}$).
 - **Dual-Input Synchronized Area Control:** Synchronized numeric stepper (10 sqft granularity) and smooth range slider (50 sqft granularity) from 100 to 10,000 sqft.
-- **Instant Developer API Workbench:** A dedicated in-browser tab allowing developers to test `POST /predict` live without external tools like Postman or page reloads. Includes payload preview, one-click execution, live response status and roundtrip latency (`Status: 200 OK (XXms)`), and clipboard copy.
+- **Instant Developer API Workbench:** A dedicated in-browser tab allowing developers to test `POST /predict`, `GET /models`, `GET /locations`, `GET /meta`, `GET /manifest`, and `GET /health` live without external tools like Postman. Includes payload preview, one-click execution, live response status and latency (`Status: 200 OK (XXms)`), and clipboard copy.
 - **Quick Preset Pills:** 1-click test scenarios for major Bengaluru hubs:
   - *Whitefield:* 2 BHK, 1,200 sqft, 2 Bath
   - *Electronic City:* 3 BHK, 1,500 sqft, 3 Bath
@@ -53,8 +63,8 @@ The Vercel-deployed application at **https://hpp-flax.vercel.app** serves as the
 - **Multi-Model Side-by-Side Inference:** Computes predictions across all 3 trained models simultaneously, displaying delta differences and variance against the top Random Forest model.
 - **Calibrated 80% Error Coverage:** Displays empirical conformal confidence intervals ($q_{0.10} - q_{0.90}$ log-residuals) derived from cross-validation.
 - **Domain Extrapolation Warnings:** Real-time visual alerts if user inputs fall outside physical training distribution boundaries or specify unseen locations.
-- **Responsive Layout:** Audited across standard Desktop (`1440x900`) and Mobile (`390x844` iPhone/Pixel) viewports with 16px touch inputs preventing iOS Safari auto-zoom.
-- **Branded Minimalist Footer:** Author copyright notice (`© 2026 Basith AbuSyed (ABu)`), portfolio link (`abufolio.vercel.app`), GitHub repository, and LinkedIn links.
+- **Branded Footer with Social Icons:** High-contrast SVG icons for Portfolio (`abufolio.vercel.app`), GitHub repository, and LinkedIn, plus author copyright notice (`© 2026 Basith AbuSyed (ABu)`) and Streamlit secondary interface banner.
+- **Cache-Busting Architecture:** Production assets served with query versioning (`style.css?v=2.3.1`, `app.js?v=2.3.1`) to ensure instant cache refreshes upon new deployments.
 
 ---
 

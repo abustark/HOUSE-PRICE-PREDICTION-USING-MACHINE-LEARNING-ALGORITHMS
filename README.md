@@ -25,14 +25,18 @@ Models evaluated: **Linear Regression**, **Ridge Regression** ($\alpha=0.1$) and
 
 ## Primary Application Features ([hpp-flax.vercel.app](https://hpp-flax.vercel.app/))
 
-- **Minimalist Editorial Interface:** Dark-mode canvas (`#0c0a09`) with warm stone accents, refined typography (`Instrument Sans`, `Newsreader` italic, `Space Grotesk`, `JetBrains Mono`), and hairline borders inspired by modern developer portfolios.
+- **Studio Slate & Cyber Indigo ML Workbench:** Modern dark canvas (`#0a0e17`) with elevated slate-blue cards (`#131c2e`, `#1e293b`), hairline borders (`rgba(99, 102, 241, 0.22)`), radiant Cyber Cyan → Electric Indigo gradient typography, and high-impact buttons.
+- **In-App Light / Dark Mode Toggle:** Instant theme switcher (`#theme-toggle`) in the floating navbar, automatically respecting system preferences and persisting across sessions via `localStorage`. Includes a crisp daylight Studio Slate palette (`#f1f5f9`).
+- **Universal 4-Tier Responsive Architecture:** Dynamically adapts across widescreen monitors, laptop split-screens, IDE side-panel browsers ($\le 960\text{px}$), tablets ($\le 768\text{px}$), and mobile devices ($\le 520\text{px}$) with zero horizontal overflow and fluid `minmax(0, 1fr)` tracks.
+- **Mobile-First Touch Optimizations:** Touch-friendly preset pills ($\ge 38\text{px}$ tap targets), auto-zoom prevention on iOS form fields (`16px` font size), and smooth touch scrolling on data tables.
+- **Upgraded Bento Metric Cards:** 4 high-contrast evaluation cards with top gradient accent bars, category badges (`★ Top Pick`, `5-Fold`, `MedAE`, `80% Interval`), 32px tabular monospace numbers, and hover elevation.
 - **Automatic Lakh / Crore Scaling:** Values $\ge 100\text{ Lakh}$ scale automatically to **Crores** (e.g., $186.20\text{ Lakh} \to \text{₹1.86 Cr}$) with full rupee breakdown ($\approx \text{₹1,86,20,000}$), while values $< 100\text{ Lakh}$ remain formatted in **Lakhs**.
-- **Interactive Developer API Workbench:** Test live `POST /predict` queries directly in the browser with real-time response previews, latency metrics (`Status: 200 OK (XXms)`), and clipboard copy.
+- **Interactive Developer API Workbench:** Test live `POST /predict`, `GET /models`, `GET /locations`, `GET /meta`, `GET /manifest`, and `GET /health` directly in the browser with real-time response previews, latency metrics (`Status: 200 OK (XXms)`), and clipboard copy.
 - **Synchronized Area Control:** Dual-input stepper (10-sqft step) and slider (50-sqft step) across 100 to 10,000 sqft.
 - **Calibrated 80% Error Intervals:** Conformal error intervals ($q_{0.10} - q_{0.90}$ log-residuals) derived from 5-fold cross-validation.
 - **Domain Extrapolation Alerts:** Identifies unrepresented locations, unseen societies, or extreme property dimensions.
 - **Multi-Model Side-by-Side Inference:** Direct comparison between Linear Regression, Ridge, and Random Forest.
-- **Responsive & Touch-Optimized:** Audited across Desktop (`1440x900`) and Mobile (`390x844`) with 16px touch inputs preventing iOS Safari auto-zoom.
+- **Branded Footer with Social Icons:** High-contrast SVG icons for Portfolio (`abufolio.vercel.app`), GitHub repository, and LinkedIn, plus author copyright notice (`© 2026 Basith AbuSyed (ABu)`) and Streamlit secondary interface banner.
 
 ---
 

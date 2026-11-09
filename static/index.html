@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
   
-  <link rel="stylesheet" href="/static/style.css?v=2.2.1" />
+  <link rel="stylesheet" href="/static/style.css?v=2.3.1" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏡</text></svg>" />
 </head>
 <body>
@@ -382,24 +382,40 @@
         <!-- Bento Metric Cards (Clean, Quiet, High Contrast) -->
         <div class="bento-metric-grid">
           <div class="bento-card">
+            <div class="bento-card-top">
+              <span class="bento-badge badge-cyan">Primary Model</span>
+              <span class="bento-pill-icon">★ Top Pick</span>
+            </div>
             <span class="bento-num">0.787</span>
             <span class="bento-label">Random Forest Test R²</span>
-            <span class="bento-sub">Explains ~79% of price variance</span>
+            <span class="bento-sub">Explains ~79% of price variance on held-out split</span>
           </div>
           <div class="bento-card">
+            <div class="bento-card-top">
+              <span class="bento-badge badge-emerald">Cross-Validation</span>
+              <span class="bento-pill-icon">5-Fold</span>
+            </div>
             <span class="bento-num">0.779</span>
             <span class="bento-label">5-Fold CV R² (±0.007)</span>
-            <span class="bento-sub">Strict fold-local preprocessing</span>
+            <span class="bento-sub">Strict fold-local preprocessing with zero leakage</span>
           </div>
           <div class="bento-card">
+            <div class="bento-card-top">
+              <span class="bento-badge badge-indigo">Robust Metric</span>
+              <span class="bento-pill-icon">MedAE</span>
+            </div>
             <span class="bento-num">₹11.07 L</span>
             <span class="bento-label">Median Absolute Error</span>
-            <span class="bento-sub">Robust against luxury skew</span>
+            <span class="bento-sub">Resistant to ultra-luxury outlier price skew</span>
           </div>
           <div class="bento-card">
+            <div class="bento-card-top">
+              <span class="bento-badge badge-violet">Calibrated Band</span>
+              <span class="bento-pill-icon">80% Interval</span>
+            </div>
             <span class="bento-num">80.6%</span>
-            <span class="bento-label">Interval Coverage</span>
-            <span class="bento-sub">Empirically calibrated coverage</span>
+            <span class="bento-label">Empirical Coverage</span>
+            <span class="bento-sub">Log-residual interval empirically verified on test</span>
           </div>
         </div>
 
@@ -503,6 +519,6 @@
     </div>
   </footer>
 
-  <script src="/static/app.js?v=2.2.1"></script>
+  <script src="/static/app.js?v=2.3.1"></script>
 </body>
 </html>

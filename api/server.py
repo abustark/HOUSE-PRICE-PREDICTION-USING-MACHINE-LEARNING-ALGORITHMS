@@ -41,7 +41,7 @@ metrics = artifacts["metrics"]
 bundle = artifacts["bundle"]
 manifest = artifacts.get("manifest", {})
 
-APP_VERSION = "2.3.1"
+APP_VERSION = "2.3.3"
 
 app = FastAPI(
     title="Bengaluru House Price API",

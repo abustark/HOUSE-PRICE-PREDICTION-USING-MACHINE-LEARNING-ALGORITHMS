@@ -638,7 +638,7 @@ async function initApp() {
 // ---------------------------------------------------------------------------
 // Real-Time Update Checker & Refresh Notification Toast
 // ---------------------------------------------------------------------------
-const APP_CLIENT_VERSION = "2.3.1";
+const APP_CLIENT_VERSION = "2.3.3";
 let updateToastDismissed = false;
 
 function initUpdateChecker() {
@@ -649,18 +649,49 @@ function initUpdateChecker() {
 
   if (!toast) return;
 
+  // Ensure initially hidden
+  toast.hidden = true;
+  toast.classList.remove("visible");
+  toast.style.display = "none";
+
+  // Check if already dismissed this session
+  try {
+    if (sessionStorage.getItem("hpp_update_dismissed")) {
+      updateToastDismissed = true;
+    }
+  } catch (e) {}
+
+  function hideToast(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    updateToastDismissed = true;
+    toast.hidden = true;
+    toast.classList.remove("visible");
+    toast.style.display = "none";
+    try {
+      sessionStorage.setItem("hpp_update_dismissed", "true");
+    } catch (err) {}
+  }
+
+  function triggerRefresh(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    // Bust browser and intermediate cache by reloading with unique timestamp query
+    const targetUrl = new URL(window.location.href);
+    targetUrl.searchParams.set("reload", Date.now().toString());
+    window.location.replace(targetUrl.toString());
+  }
+
   if (refreshBtn) {
-    refreshBtn.addEventListener("click", () => {
-      // Reload page and bypass browser cache
-      window.location.reload(true);
-    });
+    refreshBtn.addEventListener("click", triggerRefresh);
   }
 
   if (dismissBtn) {
-    dismissBtn.addEventListener("click", () => {
-      updateToastDismissed = true;
-      toast.hidden = true;
-    });
+    dismissBtn.addEventListener("click", hideToast);
   }
 
   async function checkForUpdate() {
@@ -677,14 +708,16 @@ function initUpdateChecker() {
           verBadge.textContent = `v${data.version}`;
         }
         toast.hidden = false;
+        toast.style.display = "";
+        toast.classList.add("visible");
       }
     } catch (e) {
-      // Ignore background fetch errors (e.g. offline)
+      // Ignore background network errors
     }
   }
 
-  // Check 6s after initial load
-  setTimeout(checkForUpdate, 6000);
+  // Check 5s after initial load
+  setTimeout(checkForUpdate, 5000);
 
   // Check periodically every 60 seconds
   setInterval(checkForUpdate, 60000);

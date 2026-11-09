@@ -16,7 +16,7 @@
 | **Secondary Live URL** | **https://house-price-prediction-using-machine-learning-algorithms-9qccn.streamlit.app/** (4-page Streamlit Dashboard) |
 | **Source Repository** | **https://github.com/abustark/HOUSE-PRICE-PREDICTION-USING-MACHINE-LEARNING-ALGORITHMS** |
 | **Author** | **Basith AbuSyed** (`ABu`, GitHub: [`abustark`](https://github.com/abustark)) — Final-Year MCA, The American College |
-| **Current Version** | **v2.3.1** (FastAPI backend + Studio Slate & Cyber Indigo UI + Light/Dark toggle + 4-tier responsive architecture + Lakh/Crore auto-scaling + instant API console) |
+| **Current Version** | **v2.3.3** (FastAPI backend + Studio Slate & Cyber Indigo UI + Light/Dark toggle + 4-tier responsive architecture + Mobile Ergonomics Overhaul + live update toast) |
 | **Dataset License** | CC0: Public Domain (Amitabha Roy / Kaggle) |
 | **Build & CI Status** | Maintained, GitHub Actions CI Green, 35/35 Pytest passing, Playwright E2E verified |
 

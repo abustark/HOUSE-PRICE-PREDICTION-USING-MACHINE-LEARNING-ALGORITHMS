@@ -1861,7 +1861,7 @@ select option {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  z-index: 1000;
+  z-index: 10000;
   background: linear-gradient(180deg, rgba(23, 33, 53, 0.96) 0%, rgba(14, 21, 37, 0.98) 100%);
   border: 1px solid rgba(56, 189, 248, 0.35);
   border-radius: var(--radius-lg);
@@ -1869,12 +1869,21 @@ select option {
   box-shadow: 0 12px 36px -4px rgba(10, 14, 23, 0.7), 0 0 24px rgba(56, 189, 248, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  display: flex;
+  display: none !important;
   align-items: center;
   gap: 12px;
   max-width: 420px;
-  animation: toast-slide-up 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   transition: transform 0.2s ease, opacity 0.2s ease;
+  pointer-events: auto;
+}
+
+.update-toast.visible:not([hidden]) {
+  display: flex !important;
+  animation: toast-slide-up 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.update-toast[hidden] {
+  display: none !important;
 }
 
 [data-theme="light"] .update-toast {
@@ -1960,7 +1969,7 @@ select option {
 .toast-actions {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-shrink: 0;
 }
 
@@ -1969,17 +1978,21 @@ select option {
   color: #ffffff;
   border: none;
   border-radius: var(--radius-sm);
-  padding: 6px 12px;
+  padding: 8px 14px;
+  min-height: 38px;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 700;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35);
   transition: all 0.15s ease;
   white-space: nowrap;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .toast-btn-primary:hover {
@@ -1992,20 +2005,26 @@ select option {
   background: transparent;
   border: none;
   color: var(--text-muted);
-  width: 24px;
-  height: 24px;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: 15px;
+  font-weight: 700;
   transition: all 0.15s ease;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .toast-btn-dismiss:hover {
   color: var(--text-white);
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 /* ==========================================================================
@@ -2085,41 +2104,96 @@ select option {
 
 /* --- Tier 3: Compact Tablet / Large Phones (<= 768px) --- */
 @media (max-width: 768px) {
+  /* Header Mobile Architecture: Clean 2-Row Aligned Layout */
   .header-floating {
     top: 8px;
     padding: 0 10px;
+    left: 0;
+    right: 0;
   }
 
   .header-inner {
+    display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
     padding: 10px 14px;
     border-radius: var(--radius-md);
+    gap: 8px 12px;
+    min-height: auto;
+  }
+
+  /* Row 1 Left: Brand Monogram & Title */
+  .header-brand {
+    order: 1;
+    flex: 1 1 auto;
+    min-width: 0;
     gap: 10px;
   }
 
-  .header-brand {
-    order: 1;
+  .brand-monogram {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+    flex-shrink: 0;
   }
 
+  .brand-name {
+    font-size: 14px;
+  }
+
+  .brand-version-pill {
+    font-size: 10px;
+    padding: 1px 6px;
+  }
+
+  .brand-sub {
+    display: none; /* Hide secondary tagline in mobile header */
+  }
+
+  /* Row 1 Right: Theme toggle ONLY (Streamlit & OpenAPI moved to bottom section) */
   .header-action {
     order: 2;
+    flex: 0 0 auto;
     margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
+  /* Remove Streamlit link and OpenAPI link from mobile header as requested */
+  .header-floating .nav-secondary-link,
+  .header-floating .nav-doc-link {
+    display: none !important;
+  }
+
+  .theme-toggle-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Row 2: Full-width segmented switcher with equal 3-column balance */
   .nav-segmented {
     order: 3;
     width: 100%;
-    margin-top: 2px;
+    margin-top: 4px;
     display: flex;
     justify-content: stretch;
+    background: var(--surface-input);
+    padding: 3px;
+    border-radius: var(--radius-sm);
+    gap: 2px;
   }
 
   .nav-btn {
-    flex: 1;
+    flex: 1 1 0;
     text-align: center;
     justify-content: center;
-    padding: 7px 8px;
+    padding: 8px 6px;
     font-size: 12px;
+    min-width: 0;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
   }
 
   .page-container {
@@ -2201,29 +2275,47 @@ select option {
     font-size: 14px;
   }
 
+  /* Spacious, un-cramped mobile layout with consistent margins */
   .page-container {
-    width: calc(100% - 16px);
-    margin: 16px auto 36px;
+    width: calc(100% - 24px);
+    margin: 16px auto 44px;
   }
 
   .panel-card {
-    padding: 20px 14px;
-    border-radius: 16px;
+    padding: 22px 18px;
+    border-radius: 18px;
+  }
+
+  .panel-card-header {
+    margin-bottom: 18px;
   }
 
   .hero-badge {
-    font-size: 10px;
-    padding: 5px 12px;
+    font-size: 10.5px;
+    padding: 6px 12px;
     white-space: normal;
     text-align: center;
-    line-height: 1.4;
+    line-height: 1.45;
+  }
+
+  .hero-title {
+    font-size: clamp(1.75rem, 6.5vw, 2.15rem);
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  .hero-desc {
+    font-size: 13.5px;
+    line-height: 1.55;
   }
 
   .presets-bar {
     flex-direction: column;
     align-items: stretch;
-    gap: 8px;
+    gap: 10px;
     margin-bottom: 24px;
+    padding: 14px;
+    border-radius: var(--radius-md);
   }
 
   .presets-intro {
@@ -2233,18 +2325,35 @@ select option {
   .presets-list {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6px;
+    gap: 8px;
+    width: 100%;
   }
 
   .preset-pill {
-    padding: 8px 6px;
-    font-size: 11px;
+    padding: 10px 8px;
+    font-size: 11.5px;
     text-align: center;
     white-space: normal;
-    min-height: 38px;
+    min-height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 9px;
+  }
+
+  .field-group {
+    margin-bottom: 16px;
+  }
+
+  .field-label {
+    font-size: 12.5px;
+    margin-bottom: 6px;
+  }
+
+  .model-chip {
+    padding: 12px 14px;
+    min-height: 48px;
+    border-radius: 11px;
   }
 
   .bento-metric-grid {
@@ -2253,40 +2362,41 @@ select option {
   }
 
   .bento-card {
-    padding: 16px 14px;
+    padding: 18px 16px;
   }
 
   .bento-num {
     font-size: 26px;
   }
 
-  .nav-secondary-link .secondary-tag {
-    display: none; /* Keep pill compact */
-  }
-
-  .nav-doc-link {
-    display: none; /* Save space in mobile header */
-  }
-
   .btn-primary {
-    padding: 13px 16px;
-    font-size: 14px;
+    padding: 14px 18px;
+    font-size: 14.5px;
+    border-radius: 11px;
+    min-height: 48px;
   }
 
   .valuation-hero {
-    padding: 20px 14px;
+    padding: 22px 16px;
+    border-radius: 16px;
   }
 
   .val-num {
-    font-size: 34px;
+    font-size: 36px;
   }
 
   .val-currency {
-    font-size: 22px;
+    font-size: 24px;
   }
 
   .val-unit {
-    font-size: 18px;
+    font-size: 19px;
+  }
+
+  .val-range-strip {
+    padding: 12px 14px;
+    border-radius: 12px;
+    margin-top: 16px;
   }
 
   .range-figure {
@@ -2296,14 +2406,39 @@ select option {
   .action-dispatch-bar {
     flex-direction: column;
     align-items: stretch;
+    gap: 10px;
   }
 
   .action-dispatch-bar .btn-primary-sm {
     width: 100%;
+    min-height: 44px;
     justify-content: center;
   }
 
+  /* Streamlit alternative banner in bottom section */
+  .footer-alt-banner {
+    width: calc(100% - 24px);
+    padding: 14px 16px;
+    margin-bottom: 24px;
+  }
+
+  .alt-banner-inner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .alt-link {
+    margin-left: 0;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-card-subtle);
+  }
+
   .footer-content {
+    width: calc(100% - 24px);
     flex-direction: column;
     align-items: center;
     text-align: center;
@@ -2313,19 +2448,41 @@ select option {
   .footer-links {
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
   }
 
-  /* Prevent iOS automatic page zoom when focusing on input fields */
+  /* Prevent iOS automatic page zoom when focusing on input fields & ensure comfortable touch targets */
   select, .text-input, .code-area, input[type="text"], input[type="number"] {
     font-size: 16px !important;
+    min-height: 48px;
+    padding: 12px 14px;
+    border-radius: 10px;
   }
 
+  /* Update notification toast on mobile viewports */
   .update-toast {
     bottom: 16px;
-    left: 16px;
-    right: 16px;
-    max-width: none;
-    padding: 10px 14px;
+    left: 12px;
+    right: 12px;
+    max-width: calc(100% - 24px);
+    margin: 0 auto;
+    padding: 12px 14px;
+    border-radius: 14px;
+    box-sizing: border-box;
+    z-index: 10000;
+  }
+
+  .toast-btn-primary {
+    min-height: 38px;
+    padding: 8px 14px;
+    font-size: 12.5px;
+  }
+
+  .toast-btn-dismiss {
+    min-width: 38px;
+    min-height: 38px;
+    width: 38px;
+    height: 38px;
+    font-size: 16px;
   }
 }

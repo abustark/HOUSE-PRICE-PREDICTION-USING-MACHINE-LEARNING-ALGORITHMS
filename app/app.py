@@ -42,6 +42,93 @@ st.set_page_config(
     layout="wide",
 )
 
+# Custom Modern Editorial Styling
+st.markdown(
+    """
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap');
+    
+    html, body, [class*="css"] {
+        font-family: 'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    .stApp {
+        background-color: #0b0d13;
+    }
+    
+    .primary-site-banner {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95));
+        border: 1px solid rgba(245, 158, 11, 0.35);
+        border-radius: 14px;
+        padding: 14px 20px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    
+    .banner-pill {
+        background: #f59e0b;
+        color: #090a0f;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 4px 9px;
+        border-radius: 9999px;
+    }
+    
+    .banner-text {
+        color: #f1f5f9;
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-left: 8px;
+    }
+    
+    .banner-btn {
+        background: #f8fafc;
+        color: #090d16 !important;
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 8px 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.15s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .banner-btn:hover {
+        background: #ffffff;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+    }
+    
+    div[data-testid="stMetricValue"] {
+        font-family: 'Space Grotesk', sans-serif !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+    }
+    </style>
+    
+    <div class="primary-site-banner">
+        <div>
+            <span class="banner-pill">Primary Production Site</span>
+            <span class="banner-text">Looking for the Minimalist Vercel Web App & REST API Workbench?</span>
+        </div>
+        <a class="banner-btn" href="https://hpp-flax.vercel.app/" target="_blank" rel="noopener noreferrer">
+            <span>Open hpp-flax.vercel.app</span>
+            <span>↗</span>
+        </a>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 artifacts = load_artifacts()
 bundle = artifacts["bundle"]
 metrics = artifacts["metrics"]

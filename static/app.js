@@ -11,6 +11,43 @@
 
 const $ = (id) => document.getElementById(id);
 
+// ---------------------------------------------------------------------------
+// Theme Management (Light / Dark Mode)
+// ---------------------------------------------------------------------------
+function initTheme() {
+  const stored = localStorage.getItem("hpp_theme");
+  const systemPrefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const initialTheme = stored || (systemPrefersDark ? "dark" : "light");
+  setTheme(initialTheme);
+
+  const toggleBtn = $("theme-toggle");
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", () => {
+      const current = document.documentElement.getAttribute("data-theme") || "dark";
+      const next = current === "dark" ? "light" : "dark";
+      setTheme(next);
+    });
+  }
+}
+
+function setTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  try {
+    localStorage.setItem("hpp_theme", theme);
+  } catch (e) {
+    // Ignore storage quota or disabled errors
+  }
+  const toggleBtn = $("theme-toggle");
+  if (toggleBtn) {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    toggleBtn.setAttribute("title", `Switch to ${nextTheme} theme`);
+    toggleBtn.setAttribute("aria-label", `Switch to ${nextTheme} theme`);
+  }
+}
+
+// Initialize theme immediately to prevent flashing
+initTheme();
+
 let appData = {
   models: [],
   locations: [],

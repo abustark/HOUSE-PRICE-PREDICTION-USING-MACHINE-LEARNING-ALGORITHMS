@@ -9,48 +9,48 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  /* Rich Obsidian / Deep Midnight Dark Palette (High Contrast & Depth) */
-  --bg-canvas: #090a0f;
-  --bg-ambient-1: rgba(245, 158, 11, 0.045);
-  --bg-ambient-2: rgba(56, 189, 248, 0.035);
+  /* Theme Option 3: Studio Slate & Cyber Indigo (Technical ML Workbench) */
+  --bg-canvas: #0a0e17;
+  --bg-ambient-1: rgba(99, 102, 241, 0.07);
+  --bg-ambient-2: rgba(56, 189, 248, 0.05);
 
-  --header-bg: rgba(16, 18, 26, 0.88);
-  --surface-panel: rgba(21, 24, 34, 0.85);
-  --surface-panel-border: rgba(255, 255, 255, 0.11);
-  --surface-card: #181b26;
-  --surface-card-subtle: #202432;
+  --header-bg: rgba(15, 23, 42, 0.9);
+  --surface-panel: rgba(17, 24, 39, 0.88);
+  --surface-panel-border: rgba(99, 102, 241, 0.18);
+  --surface-card: #131c2e;
+  --surface-card-subtle: #1e293b;
   --surface-card-border: rgba(255, 255, 255, 0.08);
-  --surface-input: #10121a;
-  --surface-input-border: rgba(255, 255, 255, 0.15);
+  --surface-input: #0a0f1d;
+  --surface-input-border: rgba(99, 102, 241, 0.22);
 
-  /* Refined Typography */
+  /* Refined Modern Typography */
   --font-sans: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-serif: "Newsreader", Georgia, Cambria, "Times New Roman", serif;
   --font-display: "Space Grotesk", var(--font-sans);
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* High-Contrast Text Hierarchy */
-  --text-white: #ffffff;
-  --text-main: #f1f5f9;
+  /* High-Contrast Technical Text Hierarchy */
+  --text-white: #f8fafc;
+  --text-main: #e2e8f0;
   --text-subheading: #94a3b8;
   --text-muted: #64748b;
   --text-dim: #475569;
 
-  /* Vibrant Accents */
-  --accent-gold: #f59e0b;
-  --accent-bronze: #d97706;
-  --accent-badge-bg: rgba(245, 158, 11, 0.14);
-  --accent-badge-border: rgba(245, 158, 11, 0.32);
-  --accent-gold-text: #fbbf24;
+  /* Studio Slate / Cyber Accents */
+  --accent-gold: #38bdf8;         /* Cyber Cyan primary highlight */
+  --accent-bronze: #6366f1;       /* Electric Indigo brand accent */
+  --accent-badge-bg: rgba(99, 102, 241, 0.14);
+  --accent-badge-border: rgba(99, 102, 241, 0.35);
+  --accent-gold-text: #818cf8;
 
   --status-emerald: #10b981;
-  --status-emerald-bg: rgba(16, 185, 129, 0.14);
+  --status-emerald-bg: rgba(16, 185, 129, 0.15);
   --status-amber: #f59e0b;
-  --status-amber-bg: rgba(245, 158, 11, 0.14);
+  --status-amber-bg: rgba(245, 158, 11, 0.15);
   --status-cyan: #38bdf8;
-  --status-cyan-bg: rgba(56, 189, 248, 0.14);
+  --status-cyan-bg: rgba(56, 189, 248, 0.15);
   --status-rose: #f43f5e;
-  --status-rose-bg: rgba(244, 63, 94, 0.14);
+  --status-rose-bg: rgba(244, 63, 94, 0.15);
 
   /* Radius System */
   --radius-xl: 18px;
@@ -59,43 +59,43 @@
   --radius-sm: 6px;
   --radius-pill: 9999px;
 
-  /* Shadows */
-  --shadow-subtle: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
-  --shadow-float: 0 12px 36px -4px rgba(0, 0, 0, 0.65);
+  /* Shadows with subtle cyber glow */
+  --shadow-subtle: 0 4px 24px -2px rgba(10, 14, 23, 0.7);
+  --shadow-float: 0 12px 36px -4px rgba(99, 102, 241, 0.18);
 }
 
 /* ==========================================================================
-   Editorial Light Mode Palette (Architectural Daylight & Crisp Ink)
+   Option 3 Light Mode: Crisp Studio Slate & Indigo
    ========================================================================== */
 [data-theme="light"] {
   color-scheme: light;
 
-  --bg-canvas: #f6f8fb;
-  --bg-ambient-1: rgba(217, 119, 6, 0.05);
-  --bg-ambient-2: rgba(37, 99, 235, 0.04);
+  --bg-canvas: #f1f5f9;
+  --bg-ambient-1: rgba(99, 102, 241, 0.05);
+  --bg-ambient-2: rgba(56, 189, 248, 0.04);
 
-  --header-bg: rgba(255, 255, 255, 0.88);
+  --header-bg: rgba(255, 255, 255, 0.92);
   --surface-panel: #ffffff;
-  --surface-panel-border: #e2e8f0;
+  --surface-panel-border: #cbd5e1;
   --surface-card: #f8fafc;
-  --surface-card-subtle: #f1f5f9;
+  --surface-card-subtle: #edf2f7;
   --surface-card-border: #e2e8f0;
   --surface-input: #ffffff;
   --surface-input-border: #cbd5e1;
 
   /* High-Contrast Light Text Hierarchy */
-  --text-white: #090d16;
+  --text-white: #0f172a;
   --text-main: #1e293b;
   --text-subheading: #475569;
   --text-muted: #64748b;
   --text-dim: #94a3b8;
 
-  /* Warm Muted Accents */
-  --accent-gold: #b45309;
-  --accent-bronze: #92400e;
-  --accent-badge-bg: rgba(217, 119, 6, 0.09);
-  --accent-badge-border: rgba(217, 119, 6, 0.28);
-  --accent-gold-text: #b45309;
+  /* Studio Indigo & Sky Accents */
+  --accent-gold: #4f46e5;         /* Deep Indigo */
+  --accent-bronze: #0284c7;       /* Deep Sky */
+  --accent-badge-bg: rgba(99, 102, 241, 0.09);
+  --accent-badge-border: rgba(99, 102, 241, 0.28);
+  --accent-gold-text: #4338ca;
 
   --status-emerald: #059669;
   --status-emerald-bg: rgba(5, 150, 105, 0.1);
@@ -106,8 +106,8 @@
   --status-rose: #e11d48;
   --status-rose-bg: rgba(225, 29, 72, 0.1);
 
-  --shadow-subtle: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
-  --shadow-float: 0 12px 32px -4px rgba(15, 23, 42, 0.12);
+  --shadow-subtle: 0 4px 20px -2px rgba(15, 23, 42, 0.07);
+  --shadow-float: 0 12px 32px -4px rgba(99, 102, 241, 0.12);
 }
 
 /* Base Reset */
@@ -185,19 +185,19 @@ body {
 }
 
 .brand-monogram {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  background: var(--text-white);
-  color: var(--bg-canvas);
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #4f46e5 0%, #38bdf8 100%);
+  color: #ffffff;
   font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 12.5px;
+  font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
   letter-spacing: -0.5px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
 }
 
 .brand-info {
@@ -222,12 +222,12 @@ body {
 .brand-version-pill {
   font-family: var(--font-mono);
   font-size: 10px;
-  color: var(--accent-gold);
-  background: var(--accent-badge-bg);
-  padding: 1px 6px;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  padding: 1px 7px;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--accent-badge-border);
-  font-weight: 500;
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  font-weight: 600;
 }
 
 .brand-sub {
@@ -834,8 +834,8 @@ select option {
 /* Primary Action Button */
 .btn-primary {
   width: 100%;
-  background: var(--text-white);
-  color: var(--bg-canvas);
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  color: #ffffff;
   border: none;
   border-radius: var(--radius-md);
   padding: 13px 20px;
@@ -848,20 +848,21 @@ select option {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: var(--shadow-subtle);
+  box-shadow: 0 4px 18px rgba(79, 70, 229, 0.35);
   transition: all 0.15s ease;
   min-height: 46px;
 }
 
 [data-theme="light"] .btn-primary {
-  background: #0f172a;
+  background: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%);
   color: #ffffff;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
 }
 
 .btn-primary:hover:not(:disabled) {
-  opacity: 0.94;
+  opacity: 0.96;
   transform: translateY(-1px);
-  box-shadow: var(--shadow-float);
+  box-shadow: 0 6px 24px rgba(99, 102, 241, 0.5);
 }
 
 .btn-primary:active:not(:disabled) {
@@ -977,10 +978,10 @@ select option {
 }
 
 .active-model-tag {
-  background: var(--accent-badge-bg);
-  border: 1px solid var(--accent-badge-border);
-  color: var(--accent-gold);
-  font-weight: 600;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #10b981;
+  font-weight: 700;
 }
 
 .date-tag {
@@ -1344,8 +1345,8 @@ select option {
 }
 
 .btn-primary-sm {
-  background: var(--text-white);
-  color: var(--bg-canvas);
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  color: #ffffff;
   border: none;
   border-radius: var(--radius-sm);
   padding: 8px 16px;
@@ -1357,16 +1358,19 @@ select option {
   align-items: center;
   gap: 6px;
   transition: all 0.15s ease;
-  box-shadow: var(--shadow-subtle);
+  box-shadow: 0 2px 10px rgba(79, 70, 229, 0.3);
 }
 
 [data-theme="light"] .btn-primary-sm {
-  background: #0f172a;
+  background: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%);
   color: #ffffff;
 }
 
 .btn-primary-sm:hover:not(:disabled) {
-  opacity: 0.94;
+  opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.45);
+}
   transform: translateY(-1px);
 }
 

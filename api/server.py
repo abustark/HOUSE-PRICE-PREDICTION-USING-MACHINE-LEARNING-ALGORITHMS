@@ -41,6 +41,8 @@ metrics = artifacts["metrics"]
 bundle = artifacts["bundle"]
 manifest = artifacts.get("manifest", {})
 
+APP_VERSION = "2.3.1"
+
 app = FastAPI(
     title="Bengaluru House Price API",
     description=(
@@ -48,7 +50,7 @@ app = FastAPI(
         "Three regression models (Linear, Ridge, Random Forest) are trained with fold-local "
         "preprocessing to prevent data leakage."
     ),
-    version="2.2.0",
+    version=APP_VERSION,
 )
 
 
@@ -131,9 +133,19 @@ def locations():
     }
 
 
+@app.get("/version")
+def version():
+    return {
+        "version": APP_VERSION,
+        "schema_version": SCHEMA_VERSION,
+        "status": "ready",
+    }
+
+
 @app.get("/meta")
 def meta():
     return {
+        "version": APP_VERSION,
         "schema_version": SCHEMA_VERSION,
         "supported_area_types": list(SUPPORTED_AREA_TYPES),
         "validation_constraints": VALIDATION_CONSTRAINTS,

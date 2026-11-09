@@ -630,6 +630,71 @@ async function initApp() {
   });
 
   $("predict-btn")?.addEventListener("click", handlePredict);
+
+  // Initialize live update notification listener
+  initUpdateChecker();
+}
+
+// ---------------------------------------------------------------------------
+// Real-Time Update Checker & Refresh Notification Toast
+// ---------------------------------------------------------------------------
+const APP_CLIENT_VERSION = "2.3.1";
+let updateToastDismissed = false;
+
+function initUpdateChecker() {
+  const toast = $("update-toast");
+  const refreshBtn = $("toast-refresh-btn");
+  const dismissBtn = $("toast-dismiss-btn");
+  const verBadge = $("toast-new-ver");
+
+  if (!toast) return;
+
+  if (refreshBtn) {
+    refreshBtn.addEventListener("click", () => {
+      // Reload page and bypass browser cache
+      window.location.reload(true);
+    });
+  }
+
+  if (dismissBtn) {
+    dismissBtn.addEventListener("click", () => {
+      updateToastDismissed = true;
+      toast.hidden = true;
+    });
+  }
+
+  async function checkForUpdate() {
+    if (updateToastDismissed) return;
+    try {
+      // Fetch version.json with cache: "no-store" and cache-busting query
+      const res = await fetch(`/static/version.json?t=${Date.now()}`, {
+        cache: "no-store",
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data && data.version && data.version !== APP_CLIENT_VERSION) {
+        if (verBadge) {
+          verBadge.textContent = `v${data.version}`;
+        }
+        toast.hidden = false;
+      }
+    } catch (e) {
+      // Ignore background fetch errors (e.g. offline)
+    }
+  }
+
+  // Check 6s after initial load
+  setTimeout(checkForUpdate, 6000);
+
+  // Check periodically every 60 seconds
+  setInterval(checkForUpdate, 60000);
+
+  // Check whenever user switches back to this browser tab
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      checkForUpdate();
+    }
+  });
 }
 
 initApp().catch((err) => {

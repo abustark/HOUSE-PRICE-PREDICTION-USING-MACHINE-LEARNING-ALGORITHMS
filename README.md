@@ -64,9 +64,31 @@ Models evaluated: **Linear Regression**, **Ridge Regression** ($\alpha=0.1$) and
 ├── artifacts/                  # 9 diagnostic ML charts (price distribution, residuals, etc.)
 ├── notebooks/                  # Executed 33-cell reproducibility notebook
 ├── tests/                      # Automated test suite (35 pytest tests + Playwright e2e)
-├── vercel.json                 # Vercel serverless deployment routing
-└── Dockerfile                  # Production container configuration
+├── crates/                     # Rust Multi-Crate Workspace (Systems ML)
+│   ├── hpp-core/               # Core feature normalization & validation engine in Rust
+│   └── hpp-cli/                # Parallel real-estate ETL & cleaning CLI engine (Rayon + Clap)
+├── Cargo.toml                  # Rust workspace root configuration
+├── Dockerfile                  # Production container configuration
 ```
+
+---
+
+## Rust High-Performance Engine (`crates/`)
+
+The repository features a native **Rust Multi-Crate Workspace** engineered for multi-core parallelism and sub-millisecond dataset processing:
+
+- **`hpp-core`**: Pure-Rust feature validation, categorical normalization, Indian land unit conversion (`SQFT_PER_UNIT`), and range parsing.
+- **`hpp-cli`**: High-throughput command-line ETL engine powered by [Rayon](https://github.com/rayon-rs/rayon) and [Clap](https://github.com/clap-rs/clap):
+  ```bash
+  # Statistical dataset summary across all CPU threads
+  cargo run --bin hpp-cli -- stats --input data/Bengaluru_House_Data.csv
+
+  # Parallel data cleaning and export
+  cargo run --bin hpp-cli -- clean --input data/Bengaluru_House_Data.csv --output data/cleaned.csv
+
+  # Multi-threaded throughput benchmark (rows/sec)
+  cargo run --bin hpp-cli -- benchmark --iterations 10
+  ```
 
 ---
 

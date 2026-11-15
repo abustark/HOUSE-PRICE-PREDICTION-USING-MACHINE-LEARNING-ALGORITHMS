@@ -242,6 +242,9 @@ All tests run via `pytest -q` and pass with 0 failures:
 │   └── manifest.json           # Model hash, dataset provenance & training metadata
 ├── notebooks/
 │   └── House_Price_Prediction.ipynb # Fully executed 33-cell reproducibility notebook
+├── crates/                     # Rust Multi-Crate Workspace (Systems ML)
+│   ├── hpp-core/               # Core feature normalization & validation engine in Rust
+│   └── hpp-cli/                # Parallel real-estate ETL & cleaning CLI engine (Rayon + Clap)
 ├── src/
 │   ├── encoding.py             # DataPreprocessor class, categorical schemas, bounds
 │   ├── train.py                # Zero-leakage training, tuning, and evaluation script
@@ -253,10 +256,10 @@ All tests run via `pytest -q` and pass with 0 failures:
 │   └── run_playwright_inspection.py     # Playwright E2E Desktop & Mobile test runner
 ├── .github/workflows/ci.yml    # GitHub Actions automated test workflow
 ├── AGENTS.md                   # AI pair programming guidelines & execution rules
+├── Cargo.toml                  # Rust workspace root configuration
 ├── Dockerfile                  # Production container configuration
 ├── PROJECT-INFO.md             # This document (canonical system knowledge base)
 ├── README.md                   # Public repository documentation
-├── vercel.json                 # Vercel serverless deployment routing
 └── requirements.txt            # Lean production dependencies (under 500MB cap)
 ```
 

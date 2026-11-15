@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "crates/hpp-cli",
+    "crates/hpp-core",
+]
+resolver = "2"

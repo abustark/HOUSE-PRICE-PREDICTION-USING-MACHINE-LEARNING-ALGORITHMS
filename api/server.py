@@ -34,18 +34,11 @@ from src.predict import (  # noqa: E402
     predict_detailed,
 )
 
-PUBLIC_DIR = os.path.join(BASE_DIR, "public")
+from starlette.middleware.base import BaseHTTPMiddleware  # noqa: E402
+from starlette.requests import Request  # noqa: E402
+from starlette.responses import Response  # noqa: E402
+
 STATIC_DIR = os.path.join(BASE_DIR, "static")
-SERVE_STATIC_DIR = (
-    os.path.join(PUBLIC_DIR, "static")
-    if os.path.isdir(os.path.join(PUBLIC_DIR, "static"))
-    else STATIC_DIR
-)
-INDEX_FILE = (
-    os.path.join(PUBLIC_DIR, "index.html")
-    if os.path.isfile(os.path.join(PUBLIC_DIR, "index.html"))
-    else os.path.join(STATIC_DIR, "index.html")
-)
 
 artifacts = load_artifacts()
 metrics = artifacts["metrics"]
@@ -63,6 +56,26 @@ app = FastAPI(
     ),
     version=APP_VERSION,
 )
+
+
+class CacheControlMiddleware(BaseHTTPMiddleware):
+    """
+    Sets optimized Edge CDN and browser cache headers:
+    - /static/* assets (CSS, JS, bootstrap, version): immutable cache for 1 year.
+    - / (HTML): edge s-maxage caching with stale-while-revalidate for sub-100ms global TTFB.
+    """
+
+    async def dispatch(self, request: Request, call_next):
+        response: Response = await call_next(request)
+        path = request.url.path
+        if path.startswith("/static/"):
+            response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+        elif path == "/" or path == "/index.html":
+            response.headers["Cache-Control"] = "public, max-age=0, s-maxage=86400, stale-while-revalidate=86400"
+        return response
+
+
+app.add_middleware(CacheControlMiddleware)
 
 
 class PredictionRequest(BaseModel):
@@ -194,10 +207,7 @@ def predict(payload: PredictionRequest):
 
 @app.get("/")
 def index():
-    return FileResponse(
-        INDEX_FILE,
-        headers={"Cache-Control": "public, max-age=0, must-revalidate"},
-    )
+    return FileResponse(os.path.join(STATIC_DIR, "index.html"))
 
 
-app.mount("/static", StaticFiles(directory=SERVE_STATIC_DIR), name="static")
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")

@@ -1,0 +1,17 @@
+[package]
+name = "hpp-server"
+version = "0.1.0"
+edition = "2021"
+description = "High-throughput, ultra-low-latency Axum/Tokio web microservice for Bengaluru House Price Prediction"
+authors = ["Basith AbuSyed <abustark>"]
+
+[dependencies]
+axum = { version = "0.7", features = ["macros"] }
+tokio = { version = "1", features = ["full"] }
+tower = { version = "0.4", features = ["util"] }
+tower-http = { version = "0.5", features = ["cors", "fs", "trace"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+hpp-core = { path = "../hpp-core" }

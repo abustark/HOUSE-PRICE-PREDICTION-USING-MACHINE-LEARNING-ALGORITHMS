@@ -17,6 +17,13 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 
+try:
+    import hpp_fast  # type: ignore
+    _HAVE_HPP_FAST = True
+except ImportError:
+    hpp_fast = None
+    _HAVE_HPP_FAST = False
+
 SCHEMA_VERSION = "2.1.0"
 
 # Sentinel for missing high-cardinality categories. A dedicated category is
@@ -91,6 +98,11 @@ def parse_sqft(value: Any) -> float:
     other area units such as '34.46Sq. Meter', '1100Sq. Yards' or '5Acres'.
     Returns np.nan for negative, zero or malformed inputs.
     """
+    if _HAVE_HPP_FAST and isinstance(value, str):
+        fast_res = hpp_fast.parse_sqft(value)
+        if fast_res is not None:
+            return float(fast_res)
+
     if value is None or pd.isna(value):
         return np.nan
     text = str(value).strip().replace(",", "")
@@ -161,6 +173,10 @@ def parse_availability(value: Any) -> int:
 
 def clean_category(value: Any, default: str = MISSING) -> str:
     """Normalise free-text category input; empty/placeholder text becomes default (MISSING)."""
+    if _HAVE_HPP_FAST and isinstance(value, str):
+        res = hpp_fast.clean_category(value)
+        return default if res == MISSING else res
+
     if value is None or pd.isna(value):
         return default
     text = re.sub(r"\s+", " ", str(value)).strip()

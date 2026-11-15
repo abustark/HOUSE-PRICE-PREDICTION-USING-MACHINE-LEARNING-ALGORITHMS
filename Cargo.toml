@@ -2,5 +2,8 @@
 members = [
     "crates/hpp-cli",
     "crates/hpp-core",
+    "crates/hpp-wasm",
+    "crates/hpp-pyo3",
+    "crates/hpp-server",
 ]
 resolver = "2"

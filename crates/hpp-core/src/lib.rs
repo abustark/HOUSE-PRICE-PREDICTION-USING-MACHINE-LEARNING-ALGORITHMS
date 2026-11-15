@@ -1,4 +1,5 @@
-//! Core domain models, feature normalization, and boundary validation for Bengaluru House Price Prediction.
+//! Core domain models, feature normalization, boundary validation, and fast inference engine
+//! for Bengaluru House Price Prediction.
 
 use regex::Regex;
 use serde::{Deserialize, Serialize};
@@ -149,6 +150,19 @@ pub fn clean_area_type(raw: &str) -> Option<String> {
     }
 }
 
+/// Clean categorical string: strips spaces, normalizes empty/nan/none to `__MISSING__`.
+pub fn clean_category(raw: &str) -> String {
+    let trimmed = raw.trim();
+    if trimmed.is_empty()
+        || trimmed.eq_ignore_ascii_case("nan")
+        || trimmed.eq_ignore_ascii_case("none")
+        || trimmed.eq_ignore_ascii_case("null")
+    {
+        return MISSING.to_string();
+    }
+    RE_WHITESPACE.replace_all(trimmed, " ").to_string()
+}
+
 /// Standardized validation input payload.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RawListingInput {
@@ -244,6 +258,201 @@ pub fn validate_input(input: &RawListingInput) -> ValidationResult {
     }
 }
 
+// ---------------------------------------------------------------------------
+// Model Weights, Feature Scaling & Fast Inference
+// ---------------------------------------------------------------------------
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ScalerParams {
+    pub mean: Vec<f64>,
+    pub scale: Vec<f64>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LinearModelParams {
+    pub coef: Vec<f64>,
+    pub intercept: f64,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ModelBundle {
+    pub schema_version: String,
+    pub feature_order: Vec<String>,
+    pub bhk_median: i32,
+    pub scaler: ScalerParams,
+    pub linear: LinearModelParams,
+    pub ridge: LinearModelParams,
+    pub location_freq: HashMap<String, f64>,
+    pub society_freq: HashMap<String, f64>,
+}
+
+// Embedded production weights JSON bundle compiled directly into the binary
+static EMBEDDED_BUNDLE_JSON: &str = include_str!("../../../models/weights.json");
+static EMBEDDED_BUNDLE: LazyLock<ModelBundle> = LazyLock::new(|| {
+    serde_json::from_str(EMBEDDED_BUNDLE_JSON).expect("Failed to deserialize embedded weights.json")
+});
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PredictionResult {
+    pub price_lakh: f64,
+    pub price_range_lakh: (f64, f64),
+    pub price_per_sqft: f64,
+    pub model_used: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FullInferenceResponse {
+    pub success: bool,
+    pub input_summary: RawListingInput,
+    pub prediction: PredictionResult,
+    pub linear_lakh: f64,
+    pub ridge_lakh: f64,
+    pub warnings: Vec<String>,
+    pub errors: Vec<String>,
+    pub engine: String,
+}
+
+impl ModelBundle {
+    /// Retrieve static reference to embedded weights bundle
+    pub fn embedded() -> &'static ModelBundle {
+        &EMBEDDED_BUNDLE
+    }
+
+    /// Load weights from a raw JSON string
+    pub fn from_json_str(s: &str) -> Result<Self, serde_json::Error> {
+        serde_json::from_str(s)
+    }
+
+    /// Encode input features into raw numeric vector [total_sqft, bath, balcony, bhk, area_type, completion_year, location, society]
+    pub fn encode_features(&self, input: &RawListingInput) -> [f64; 8] {
+        let area_idx = match clean_area_type(&input.area_type).as_deref() {
+            Some("Built-up Area") => 0.0,
+            Some("Carpet Area") => 1.0,
+            Some("Plot Area") => 2.0,
+            Some("Super built-up Area") => 3.0,
+            _ => 3.0,
+        };
+
+        let loc_clean = clean_category(&input.location);
+        let loc_val = self.location_freq.get(&loc_clean).copied().unwrap_or(0.0);
+
+        let soc_clean = clean_category(&input.society);
+        let soc_val = self.society_freq.get(&soc_clean).copied().unwrap_or(0.0);
+
+        let bhk_val = if input.bhk > 0 {
+            input.bhk as f64
+        } else {
+            self.bhk_median as f64
+        };
+
+        [
+            input.total_sqft,
+            input.bath as f64,
+            input.balcony as f64,
+            bhk_val,
+            area_idx,
+            input.completion_year as f64,
+            loc_val,
+            soc_val,
+        ]
+    }
+
+    /// Standardize raw features using StandardScaler (mean & scale)
+    pub fn scale_features(&self, raw: &[f64; 8]) -> [f64; 8] {
+        let mut scaled = [0.0; 8];
+        for i in 0..8 {
+            scaled[i] = (raw[i] - self.scaler.mean[i]) / self.scaler.scale[i];
+        }
+        scaled
+    }
+
+    /// Predict price in Lakhs using Ridge or Linear regression weights
+    pub fn predict_model(&self, scaled: &[f64; 8], model_name: &str) -> f64 {
+        let (coef, intercept) = if model_name.eq_ignore_ascii_case("ridge") {
+            (&self.ridge.coef, self.ridge.intercept)
+        } else {
+            (&self.linear.coef, self.linear.intercept)
+        };
+
+        let mut dot = intercept;
+        for i in 0..8 {
+            dot += coef[i] * scaled[i];
+        }
+
+        // Training target was y = log(1 + price_lakh)
+        let pred_lakh = dot.exp() - 1.0;
+        if pred_lakh < 1.0 {
+            1.0
+        } else {
+            pred_lakh
+        }
+    }
+
+    /// Full inference pipeline matching Python API semantics
+    pub fn infer(&self, input: &RawListingInput) -> FullInferenceResponse {
+        let v_res = validate_input(input);
+        if !v_res.is_valid {
+            return FullInferenceResponse {
+                success: false,
+                input_summary: input.clone(),
+                prediction: PredictionResult {
+                    price_lakh: 0.0,
+                    price_range_lakh: (0.0, 0.0),
+                    price_per_sqft: 0.0,
+                    model_used: input.model.clone(),
+                },
+                linear_lakh: 0.0,
+                ridge_lakh: 0.0,
+                warnings: v_res.warnings,
+                errors: v_res.errors,
+                engine: "rust-hpp-core".to_string(),
+            };
+        }
+
+        let raw_feats = self.encode_features(input);
+        let scaled_feats = self.scale_features(&raw_feats);
+
+        let lin_lakh = self.predict_model(&scaled_feats, "linear");
+        let rdg_lakh = self.predict_model(&scaled_feats, "ridge");
+
+        let active_lakh = if input.model.eq_ignore_ascii_case("ridge") {
+            rdg_lakh
+        } else {
+            lin_lakh
+        };
+
+        // Historical MAE is ~0.315 log scale for linear/ridge
+        let error_factor = (0.315f64).exp();
+        let lower = (active_lakh / error_factor).max(1.0);
+        let upper = active_lakh * error_factor;
+
+        let price_per_sqft = if input.total_sqft > 0.0 {
+            (active_lakh * 100_000.0) / input.total_sqft
+        } else {
+            0.0
+        };
+
+        FullInferenceResponse {
+            success: true,
+            input_summary: input.clone(),
+            prediction: PredictionResult {
+                price_lakh: (active_lakh * 100.0).round() / 100.0,
+                price_range_lakh: (
+                    (lower * 100.0).round() / 100.0,
+                    (upper * 100.0).round() / 100.0,
+                ),
+                price_per_sqft: (price_per_sqft * 100.0).round() / 100.0,
+                model_used: input.model.clone(),
+            },
+            linear_lakh: (lin_lakh * 100.0).round() / 100.0,
+            ridge_lakh: (rdg_lakh * 100.0).round() / 100.0,
+            warnings: v_res.warnings,
+            errors: Vec::new(),
+            engine: "rust-hpp-core".to_string(),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -282,5 +491,28 @@ mod tests {
         assert_eq!(parse_availability("Ready To Move"), 0);
         assert_eq!(parse_availability("19-Dec"), 2019);
         assert_eq!(parse_availability("18-May"), 2018);
+    }
+
+    #[test]
+    fn test_embedded_model_inference() {
+        let bundle = ModelBundle::embedded();
+        let input = RawListingInput {
+            area_type: "Super built-up Area".to_string(),
+            location: "Whitefield".to_string(),
+            society: "".to_string(),
+            bhk: 2,
+            total_sqft: 1200.0,
+            bath: 2,
+            balcony: 1,
+            completion_year: 0,
+            model: "linear".to_string(),
+        };
+
+        let res = bundle.infer(&input);
+        assert!(res.success);
+        assert!(res.errors.is_empty());
+        // Expected linear prediction is ~56.81 Lakhs
+        assert!((res.linear_lakh - 56.81).abs() < 0.05);
+        assert!((res.ridge_lakh - 56.81).abs() < 0.05);
     }
 }

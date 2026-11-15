@@ -34,14 +34,25 @@ from src.predict import (  # noqa: E402
     predict_detailed,
 )
 
+PUBLIC_DIR = os.path.join(BASE_DIR, "public")
 STATIC_DIR = os.path.join(BASE_DIR, "static")
+SERVE_STATIC_DIR = (
+    os.path.join(PUBLIC_DIR, "static")
+    if os.path.isdir(os.path.join(PUBLIC_DIR, "static"))
+    else STATIC_DIR
+)
+INDEX_FILE = (
+    os.path.join(PUBLIC_DIR, "index.html")
+    if os.path.isfile(os.path.join(PUBLIC_DIR, "index.html"))
+    else os.path.join(STATIC_DIR, "index.html")
+)
 
 artifacts = load_artifacts()
 metrics = artifacts["metrics"]
 bundle = artifacts["bundle"]
 manifest = artifacts.get("manifest", {})
 
-APP_VERSION = "2.3.3"
+APP_VERSION = "2.3.4"
 
 app = FastAPI(
     title="Bengaluru House Price API",
@@ -183,7 +194,10 @@ def predict(payload: PredictionRequest):
 
 @app.get("/")
 def index():
-    return FileResponse(os.path.join(STATIC_DIR, "index.html"))
+    return FileResponse(
+        INDEX_FILE,
+        headers={"Cache-Control": "public, max-age=0, must-revalidate"},
+    )
 
 
-app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+app.mount("/static", StaticFiles(directory=SERVE_STATIC_DIR), name="static")

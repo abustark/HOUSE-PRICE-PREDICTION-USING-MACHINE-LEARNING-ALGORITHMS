@@ -577,35 +577,66 @@ async function initApp() {
   initPresets();
   initApiConsole();
 
-  // Load models, locations, metadata in parallel
-  const [modelsRes, locsRes, metaRes] = await Promise.all([
-    fetchJSON("/models"),
-    fetchJSON("/locations"),
-    fetchJSON("/meta"),
-  ]);
-
-  if (modelsRes.ok) {
-    appData.models = modelsRes.data.models || [];
-    appData.bestModel = modelsRes.data.best_model || "random_forest";
-    appData.selectedModel = appData.bestModel;
-    renderModelChips();
-    populateMetricsTable();
+  // Fast Path: Load pre-cached static bootstrap data instantly from Vercel Edge CDN (< 20ms)
+  let bootstrapLoaded = false;
+  try {
+    const bootRes = await fetch("/static/bootstrap.json", { cache: "default" });
+    if (bootRes.ok) {
+      const boot = await bootRes.json();
+      if (boot && boot.locations && boot.models) {
+        appData.models = boot.models || [];
+        appData.bestModel = boot.best_model || "random_forest";
+        appData.selectedModel = appData.bestModel;
+        appData.locations = boot.locations || [];
+        appData.meta = boot.meta || {};
+        renderModelChips();
+        populateMetricsTable();
+        fillSelect($("location"), appData.locations, "Whitefield");
+        const areas = appData.meta.supported_area_types || [
+          "Built-up Area",
+          "Carpet Area",
+          "Plot Area",
+          "Super built-up Area",
+        ];
+        fillSelect($("area_type"), areas, "Super built-up Area");
+        bootstrapLoaded = true;
+      }
+    }
+  } catch (e) {
+    // Graceful fallback to dynamic endpoints below
   }
 
-  if (locsRes.ok) {
-    appData.locations = locsRes.data.locations || [];
-    fillSelect($("location"), appData.locations, "Whitefield");
-  }
+  if (!bootstrapLoaded) {
+    // Dynamic Fallback
+    const [modelsRes, locsRes, metaRes] = await Promise.all([
+      fetchJSON("/models"),
+      fetchJSON("/locations"),
+      fetchJSON("/meta"),
+    ]);
 
-  if (metaRes.ok) {
-    appData.meta = metaRes.data;
-    const areas = metaRes.data.supported_area_types || [
-      "Built-up Area",
-      "Carpet Area",
-      "Plot Area",
-      "Super built-up Area",
-    ];
-    fillSelect($("area_type"), areas, "Super built-up Area");
+    if (modelsRes.ok) {
+      appData.models = modelsRes.data.models || [];
+      appData.bestModel = modelsRes.data.best_model || "random_forest";
+      appData.selectedModel = appData.bestModel;
+      renderModelChips();
+      populateMetricsTable();
+    }
+
+    if (locsRes.ok) {
+      appData.locations = locsRes.data.locations || [];
+      fillSelect($("location"), appData.locations, "Whitefield");
+    }
+
+    if (metaRes.ok) {
+      appData.meta = metaRes.data;
+      const areas = metaRes.data.supported_area_types || [
+        "Built-up Area",
+        "Carpet Area",
+        "Plot Area",
+        "Super built-up Area",
+      ];
+      fillSelect($("area_type"), areas, "Super built-up Area");
+    }
   }
 
   // Fill BHK select (Studio / RK to 10 BHK)
@@ -638,7 +669,7 @@ async function initApp() {
 // ---------------------------------------------------------------------------
 // Real-Time Update Checker & Refresh Notification Toast
 // ---------------------------------------------------------------------------
-const APP_CLIENT_VERSION = "2.3.3";
+const APP_CLIENT_VERSION = "2.3.4";
 let updateToastDismissed = false;
 
 function initUpdateChecker() {

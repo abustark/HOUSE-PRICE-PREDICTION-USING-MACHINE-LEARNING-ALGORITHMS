@@ -166,3 +166,12 @@ This document tracks every commit following the `2.0.x` versioning schema:
   - Re-engineered primary action buttons (`.btn-primary`, `.btn-primary-sm`, `.toast-btn-primary`) from bubbly purple gradients to high-contrast architectural solid controls (bone-white on dark, obsidian on light) with crisp tactile feedback.
   - Refactored badge color tokens: replaced `.badge-indigo` and `.badge-violet` with `.badge-slate` and `.badge-amber`.
   - Bumped client asset cache busting to `?v=2.3.8` across all production templates.
+
+### 2.3.9 - Header Minimalist Cleanup & Branded Footer Update
+
+- **Date**: 2026-11-15
+
+- **Changes**:
+  - Removed header version pill (`v2.3`) from the brand mark in `static/index.html` for clean, distraction-free navigation.
+  - Updated footer copyright line from `© 2026 Basith AbuSyed (ABu). All rights reserved.` to clean branded handle `© ABu`.
+  - Bumped production client asset cache busting to `?v=2.3.9` across all static templates and API endpoints.

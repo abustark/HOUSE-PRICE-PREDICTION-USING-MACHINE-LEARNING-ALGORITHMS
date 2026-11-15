@@ -207,8 +207,8 @@ with st.expander("💡 Load a typical historical example", expanded=False):
         st.session_state["p_bath"] = 1
         st.session_state["p_balc"] = 1
         st.session_state["p_area"] = "Built-up Area"
-    if preset_cols[3].button("4 BHK Indiranagar (3,200 sqft)"):
-        st.session_state["p_loc"] = "Indiranagar"
+    if preset_cols[3].button("4 BHK Indira Nagar (3,200 sqft)"):
+        st.session_state["p_loc"] = "Indira Nagar"
         st.session_state["p_sqft"] = 3200
         st.session_state["p_bhk"] = 4
         st.session_state["p_bath"] = 4

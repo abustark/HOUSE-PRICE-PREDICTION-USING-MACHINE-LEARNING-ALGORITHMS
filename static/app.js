@@ -228,7 +228,21 @@ function initSqftSync() {
 // ---------------------------------------------------------------------------
 function setPreset(area, loc, bhk, sqft, bath, balc) {
   $("area_type").value = area;
-  $("location").value = loc;
+  
+  const locSelect = $("location");
+  if (locSelect) {
+    locSelect.value = loc;
+    if (!locSelect.value || locSelect.value !== loc) {
+      const target = loc.replace(/\s+/g, "").toLowerCase();
+      for (const opt of locSelect.options) {
+        if (opt.value.replace(/\s+/g, "").toLowerCase() === target) {
+          locSelect.value = opt.value;
+          break;
+        }
+      }
+    }
+  }
+
   $("bhk").value = String(bhk);
   $("total_sqft").value = String(sqft);
   $("total_sqft_range").value = String(sqft);
@@ -250,7 +264,7 @@ function initPresets() {
     setPreset("Built-up Area", "HSR Layout", 1, 650, 1, 1)
   );
   $("preset-indira")?.addEventListener("click", () =>
-    setPreset("Plot Area", "Indiranagar", 4, 3200, 4, 2)
+    setPreset("Plot Area", "Indira Nagar", 4, 3200, 4, 2)
   );
 }
 
@@ -669,7 +683,7 @@ async function initApp() {
 // ---------------------------------------------------------------------------
 // Real-Time Update Checker & Refresh Notification Toast
 // ---------------------------------------------------------------------------
-const APP_CLIENT_VERSION = "2.3.5";
+const APP_CLIENT_VERSION = "2.3.6";
 let updateToastDismissed = false;
 
 function initUpdateChecker() {

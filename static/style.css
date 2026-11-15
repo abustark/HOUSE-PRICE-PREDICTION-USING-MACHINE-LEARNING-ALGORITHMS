@@ -219,10 +219,11 @@ body {
 }
 
 .brand-name {
-  font-size: 13.5px;
-  font-weight: 600;
+  font-size: 15.5px;
+  font-weight: 700;
   color: var(--text-white);
-  letter-spacing: -0.2px;
+  letter-spacing: -0.25px;
+  line-height: 1.2;
 }
 
 .brand-version-pill {
@@ -237,8 +238,12 @@ body {
 }
 
 .brand-sub {
-  font-size: 10.5px;
+  font-size: 10px;
   color: var(--text-muted);
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-weight: 500;
 }
 
 /* Segmented Navigation */
@@ -2074,7 +2079,8 @@ select option {
   }
 
   .brand-sub {
-    display: none; /* Hide secondary tagline in narrow panes */
+    display: block;
+    font-size: 9.5px;
   }
 
   .nav-btn {
@@ -2139,16 +2145,19 @@ select option {
   }
 
   .brand-name {
-    font-size: 14px;
+    font-size: 14.5px;
+    font-weight: 700;
   }
 
   .brand-version-pill {
-    font-size: 10px;
-    padding: 1px 6px;
+    font-size: 9.5px;
+    padding: 1px 5px;
   }
 
   .brand-sub {
-    display: none; /* Hide secondary tagline in mobile header */
+    display: block;
+    font-size: 9.5px;
+    line-height: 1.1;
   }
 
   /* Row 1 Right: Theme toggle ONLY (Streamlit & OpenAPI moved to bottom section) */

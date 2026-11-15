@@ -16,7 +16,7 @@
 | **Secondary Live URL** | **https://house-price-prediction-using-machine-learning-algorithms-9qccn.streamlit.app/** (4-page Streamlit Dashboard) |
 | **Source Repository** | **https://github.com/abustark/HOUSE-PRICE-PREDICTION-USING-MACHINE-LEARNING-ALGORITHMS** |
 | **Author** | **Basith AbuSyed** (`ABu`, GitHub: [`abustark`](https://github.com/abustark)) — Final-Year MCA, The American College |
-| **Current Version** | **v2.3.9** (FastAPI backend + Edge CDN static routing + Lazy Model Loading + Instant Bootstrap cache + Architectural Minimalist UI + Light/Dark toggle + resilient semver update checker) |
+| **Current Version** | **v2.3.10** (FastAPI backend + Edge CDN static routing + Lazy Model Loading + Instant Bootstrap cache + Architectural Minimalist UI + Light/Dark toggle + resilient semver update checker) |
 | **Dataset License** | CC0: Public Domain (Amitabha Roy / Kaggle) |
 | **Build & CI Status** | Maintained, GitHub Actions CI Green, 35/35 Pytest passing, Playwright E2E verified |
 
@@ -63,7 +63,7 @@ The Vercel-deployed application at **https://hpp-flax.vercel.app** serves as the
 - **Multi-Model Side-by-Side Inference:** Computes predictions across all 3 trained models simultaneously, displaying delta differences and variance against the top Random Forest model.
 - **Calibrated 80% Error Coverage:** Displays empirical conformal confidence intervals ($q_{0.10} - q_{0.90}$ log-residuals) derived from cross-validation.
 - **Domain Extrapolation Warnings:** Real-time visual alerts if user inputs fall outside physical training distribution boundaries or specify unseen locations.
-- **Branded Footer with Social Icons:** High-contrast SVG icons for Portfolio (`abufolio.vercel.app`), GitHub repository, and LinkedIn, plus author copyright notice (`© ABu`) and Streamlit secondary interface banner.
+- **Branded Footer with Social Icons:** High-contrast SVG icons for Portfolio (`abufolio.vercel.app`), GitHub repository, and LinkedIn, plus author copyright notice (`© 2026 ABu. All rights reserved.`) and Streamlit secondary interface banner.
 - **Cache-Busting Architecture:** Production assets served with query versioning (`style.css?v=2.3.1`, `app.js?v=2.3.1`) to ensure instant cache refreshes upon new deployments.
 
 ---

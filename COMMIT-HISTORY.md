@@ -175,3 +175,11 @@ This document tracks every commit following the `2.0.x` versioning schema:
   - Removed header version pill (`v2.3`) from the brand mark in `static/index.html` for clean, distraction-free navigation.
   - Updated footer copyright line from `© 2026 Basith AbuSyed (ABu). All rights reserved.` to clean branded handle `© ABu`.
   - Bumped production client asset cache busting to `?v=2.3.9` across all static templates and API endpoints.
+
+### 2.3.10 - Footer Author Name Refinement
+
+- **Date**: 2026-11-15
+
+- **Changes**:
+  - Refined footer author copyright line to `© 2026 ABu. All rights reserved.` — preserving the copyright year and rights notice while displaying only the author handle `ABu`.
+  - Bumped production client asset cache busting to `?v=2.3.10` across all templates.

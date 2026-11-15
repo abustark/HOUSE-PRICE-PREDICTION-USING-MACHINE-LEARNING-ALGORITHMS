@@ -683,7 +683,7 @@ async function initApp() {
 // ---------------------------------------------------------------------------
 // Real-Time Update Checker & Refresh Notification Toast
 // ---------------------------------------------------------------------------
-const APP_CLIENT_VERSION = "2.3.7";
+const APP_CLIENT_VERSION = "2.3.8";
 let updateToastDismissed = false;
 let pendingNewVersion = null;
 

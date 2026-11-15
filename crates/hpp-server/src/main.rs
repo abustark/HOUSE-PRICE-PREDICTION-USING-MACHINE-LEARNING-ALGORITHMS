@@ -20,7 +20,7 @@ use tower_http::services::ServeDir;
 use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
 
-const APP_VERSION: &str = "2.3.7";
+const APP_VERSION: &str = "2.3.8";
 
 #[derive(Debug, Serialize)]
 struct HealthResponse {

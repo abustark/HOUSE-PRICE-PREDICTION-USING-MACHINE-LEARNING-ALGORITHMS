@@ -16,7 +16,7 @@
 | **Secondary Live URL** | **https://house-price-prediction-using-machine-learning-algorithms-9qccn.streamlit.app/** (4-page Streamlit Dashboard) |
 | **Source Repository** | **https://github.com/abustark/HOUSE-PRICE-PREDICTION-USING-MACHINE-LEARNING-ALGORITHMS** |
 | **Author** | **Basith AbuSyed** (`ABu`, GitHub: [`abustark`](https://github.com/abustark)) — Final-Year MCA, The American College |
-| **Current Version** | **v2.3.7** (FastAPI backend + Edge CDN static routing + Lazy Model Loading + Instant Bootstrap cache + Studio Slate & Cyber Indigo UI + Light/Dark toggle + resilient semver update checker) |
+| **Current Version** | **v2.3.8** (FastAPI backend + Edge CDN static routing + Lazy Model Loading + Instant Bootstrap cache + Architectural Minimalist UI + Light/Dark toggle + resilient semver update checker) |
 | **Dataset License** | CC0: Public Domain (Amitabha Roy / Kaggle) |
 | **Build & CI Status** | Maintained, GitHub Actions CI Green, 35/35 Pytest passing, Playwright E2E verified |
 
@@ -31,18 +31,18 @@
 
 The Vercel-deployed application at **https://hpp-flax.vercel.app** serves as the **primary production entry point** of this repository.
 
-### Visual & Interaction Architecture (v2.3.1 Studio Slate & Cyber Indigo Workbench)
-- **Aesthetic Direction:** High-precision Machine Learning Studio workbench inspired by modern developer products (Linear, CoverCraft, abufolio), engineered with pure vanilla HTML5, modern CSS3, and ES2022 JavaScript. Zero frontend framework overhead, zero external CDN dependencies, and zero bundle bloat.
-- **Color System (Studio Slate & Cyber Indigo):**
-  - *Dark Mode Canvas:* Deep midnight slate canvas (`#0a0e17`) with elevated slate-blue cards (`#131c2e`, `#1e293b`), hairline borders (`rgba(99, 102, 241, 0.22)`), glowing Cyber Cyan highlights (`#38bdf8`), and Electric Indigo buttons (`#4f46e5` / `#6366f1`).
-  - *Light Mode Canvas:* Crisp architectural studio slate daylight canvas (`#f1f5f9`) with porcelain cards (`#ffffff`, `#f8fafc`), deep indigo accents (`#4f46e5`), and slate typography (`#0f172a`, `#475569`).
+### Visual & Interaction Architecture (v2.3.8 Architectural Minimalist Workbench)
+- **Aesthetic Direction:** High-precision Machine Learning Studio workbench inspired by modern developer products (Linear, CoverCraft, abufolio), engineered with pure vanilla HTML5, modern CSS3, and ES2022 JavaScript. Zero frontend framework overhead, zero external CDN dependencies, and zero bundle bloat. Completely free of AI design tropes (no purple/violet gradients, no glowing neon halos, no gradient logo boxes).
+- **Color System (Carbon Slate & Architectural Bone):**
+  - *Dark Mode Canvas:* Deep matte carbon slate canvas (`#090d14`) with elevated dark slate surfaces (`#111622`, `#151b29`), subtle hairline borders (`rgba(255, 255, 255, 0.08)`), crisp high-contrast solid action buttons, and warm muted accents.
+  - *Light Mode Canvas:* Crisp architectural studio daylight canvas (`#f8fafc`) with porcelain cards (`#ffffff`), obsidian action buttons (`#0f172a`), and slate typography (`#0f172a`, `#475569`).
   - *In-App Theme Toggle:* Interactive Sun/Moon toggle (`#theme-toggle`) in floating header, automatically syncing with system preferences and persisting user choice in `localStorage`.
 - **Typography & Hierarchy:**
   - `Instrument Sans` — Clean, legible modern sans-serif body and form controls.
+  - `Newsreader` — Editorial italic serif accents for section headings and brand emphasis.
   - `Space Grotesk` — High-contrast geometric display numerals for valuation numbers and bento metrics.
   - `JetBrains Mono` — Code blocks, metric tables, API payloads, and version badges.
-  - *Hero Title:* High-contrast sans-serif headline with radiant Cyber Cyan → Electric Indigo gradient accent (`linear-gradient(135deg, #38bdf8 0%, #818cf8 100%)`).
-- **Floating Island Navigation:** Sticky architectural glass header (`header-floating`) featuring the `HP` gradient monogram, version pill (`v2.2`), segmented tab navigation with active dot indicator, secondary Streamlit badge, theme toggle, and direct link to the OpenAPI `/docs` specification.
+- **Floating Island Navigation:** Sticky architectural glass header (`header-floating`) featuring the architectural `HP` monogram badge, version pill (`v2.3`), segmented tab navigation with active dot indicator, secondary Streamlit badge, theme toggle, and direct link to the OpenAPI `/docs` specification.
 - **Universal 4-Tier Responsive Architecture:**
   - *Tier 1: Desktop / Ultrawide ($> 1100\text{px}$):* Balanced 2-column predictor grid (`1.15fr : 0.85fr`), 4-column Bento metrics.
   - *Tier 2: Side-Panel / Split-Screen IDE ($\le 960\text{px}$):* Smoothly reflows into a single-column stacked layout; header taglines compact to prevent wrapping.

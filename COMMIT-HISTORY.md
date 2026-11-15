@@ -154,3 +154,15 @@ This document tracks every commit following the `2.0.x` versioning schema:
   - Model Report page: corrected unique-value counts for location and society.
 
 - **Gates run (green)**: full retrain, notebook re-execution with 0 cell errors, headless Streamlit prediction checks on all three models.
+
+### 2.3.8 - Architectural Minimalist Redesign & Anti-Slop Overhaul
+
+- **Date**: 2026-11-15
+
+- **Changes**:
+  - Eliminated AI design slop across the web application: completely removed all purple/violet/indigo palettes, text gradient fill clipping, monogram logo gradient boxes, and bento card gradient top stripes.
+  - Introduced authentic architectural minimalism inspired by modern engineering workbenches: matte carbon surfaces (`#090d14`, `#111622`, `#151b29`), subtle hairline borders (`rgba(255, 255, 255, 0.08)` in dark, `#e2e8f0` in light), and crisp non-glowing elevation shadows.
+  - Overhauled typography hierarchy: paired Newsreader editorial italic serif accents (`var(--font-serif)`) with crisp Instrument Sans sans-serif body controls and Space Grotesk numerals.
+  - Re-engineered primary action buttons (`.btn-primary`, `.btn-primary-sm`, `.toast-btn-primary`) from bubbly purple gradients to high-contrast architectural solid controls (bone-white on dark, obsidian on light) with crisp tactile feedback.
+  - Refactored badge color tokens: replaced `.badge-indigo` and `.badge-violet` with `.badge-slate` and `.badge-amber`.
+  - Bumped client asset cache busting to `?v=2.3.8` across all production templates.

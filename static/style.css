@@ -1998,6 +1998,12 @@ select option {
   touch-action: manipulation;
   user-select: none;
   -webkit-user-select: none;
+  pointer-events: auto;
+}
+
+.toast-btn-primary svg,
+.toast-btn-primary span {
+  pointer-events: none;
 }
 
 .toast-btn-primary:hover {
@@ -2025,6 +2031,7 @@ select option {
   touch-action: manipulation;
   user-select: none;
   -webkit-user-select: none;
+  pointer-events: auto;
 }
 
 .toast-btn-dismiss:hover {

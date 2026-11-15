@@ -683,8 +683,23 @@ async function initApp() {
 // ---------------------------------------------------------------------------
 // Real-Time Update Checker & Refresh Notification Toast
 // ---------------------------------------------------------------------------
-const APP_CLIENT_VERSION = "2.3.6";
+const APP_CLIENT_VERSION = "2.3.7";
 let updateToastDismissed = false;
+let pendingNewVersion = null;
+
+function isNewerVersion(serverVer, clientVer) {
+  if (!serverVer || !clientVer) return false;
+  if (serverVer === clientVer) return false;
+  const s = serverVer.replace(/^v/i, "").split(".").map(Number);
+  const c = clientVer.replace(/^v/i, "").split(".").map(Number);
+  for (let i = 0; i < Math.max(s.length, c.length); i++) {
+    const sv = s[i] || 0;
+    const cv = c[i] || 0;
+    if (sv > cv) return true;
+    if (sv < cv) return false;
+  }
+  return false;
+}
 
 function initUpdateChecker() {
   const toast = $("update-toast");
@@ -699,13 +714,6 @@ function initUpdateChecker() {
   toast.classList.remove("visible");
   toast.style.display = "none";
 
-  // Check if already dismissed this session
-  try {
-    if (sessionStorage.getItem("hpp_update_dismissed")) {
-      updateToastDismissed = true;
-    }
-  } catch (e) {}
-
   function hideToast(e) {
     if (e) {
       e.preventDefault();
@@ -715,9 +723,11 @@ function initUpdateChecker() {
     toast.hidden = true;
     toast.classList.remove("visible");
     toast.style.display = "none";
-    try {
-      sessionStorage.setItem("hpp_update_dismissed", "true");
-    } catch (err) {}
+    if (pendingNewVersion) {
+      try {
+        localStorage.setItem("hpp_dismissed_version", pendingNewVersion);
+      } catch (err) {}
+    }
   }
 
   function triggerRefresh(e) {
@@ -725,6 +735,12 @@ function initUpdateChecker() {
       e.preventDefault();
       e.stopPropagation();
     }
+    if (pendingNewVersion) {
+      try {
+        localStorage.setItem("hpp_refreshed_version", pendingNewVersion);
+      } catch (err) {}
+    }
+    hideToast();
     // Bust browser and intermediate cache by reloading with unique timestamp query
     const targetUrl = new URL(window.location.href);
     targetUrl.searchParams.set("reload", Date.now().toString());
@@ -733,29 +749,56 @@ function initUpdateChecker() {
 
   if (refreshBtn) {
     refreshBtn.addEventListener("click", triggerRefresh);
+    refreshBtn.addEventListener("touchend", triggerRefresh, { passive: false });
   }
 
   if (dismissBtn) {
     dismissBtn.addEventListener("click", hideToast);
+    dismissBtn.addEventListener("touchend", hideToast, { passive: false });
   }
 
   async function checkForUpdate() {
     if (updateToastDismissed) return;
     try {
-      // Fetch version.json with cache: "no-store" and cache-busting query
-      const res = await fetch(`/static/version.json?t=${Date.now()}`, {
+      // Query /version with cache-busting timestamp
+      const res = await fetch(`/version?t=${Date.now()}`, {
         cache: "no-store",
+        headers: { "Cache-Control": "no-cache" },
       });
       if (!res.ok) return;
       const data = await res.json();
-      if (data && data.version && data.version !== APP_CLIENT_VERSION) {
-        if (verBadge) {
-          verBadge.textContent = `v${data.version}`;
+      const serverVer = data && data.version;
+      if (!serverVer) return;
+
+      // Clean up past refreshed flag if client is now up-to-date
+      try {
+        const lastRefreshed = localStorage.getItem("hpp_refreshed_version");
+        if (lastRefreshed && !isNewerVersion(lastRefreshed, APP_CLIENT_VERSION)) {
+          localStorage.removeItem("hpp_refreshed_version");
         }
-        toast.hidden = false;
-        toast.style.display = "";
-        toast.classList.add("visible");
+      } catch (err) {}
+
+      // ONLY notify if the server version is strictly newer than current client
+      if (!isNewerVersion(serverVer, APP_CLIENT_VERSION)) {
+        return;
       }
+
+      // Check if user already dismissed or refreshed this specific version
+      try {
+        const dismissedVer = localStorage.getItem("hpp_dismissed_version");
+        const refreshedVer = localStorage.getItem("hpp_refreshed_version");
+        if (dismissedVer === serverVer || refreshedVer === serverVer) {
+          return;
+        }
+      } catch (err) {}
+
+      pendingNewVersion = serverVer;
+      if (verBadge) {
+        verBadge.textContent = `v${serverVer}`;
+      }
+      toast.hidden = false;
+      toast.style.display = "";
+      toast.classList.add("visible");
     } catch (e) {
       // Ignore background network errors
     }

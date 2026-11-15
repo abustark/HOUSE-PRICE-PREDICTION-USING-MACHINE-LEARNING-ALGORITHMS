@@ -45,7 +45,7 @@ metrics = artifacts["metrics"]
 bundle = artifacts["bundle"]
 manifest = artifacts.get("manifest", {})
 
-APP_VERSION = "2.3.6"
+APP_VERSION = "2.3.7"
 
 app = FastAPI(
     title="Bengaluru House Price API",
@@ -68,7 +68,11 @@ class CacheControlMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         response: Response = await call_next(request)
         path = request.url.path
-        if path.startswith("/static/"):
+        if path == "/version" or path == "/static/version.json":
+            response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+            response.headers["Pragma"] = "no-cache"
+            response.headers["Expires"] = "0"
+        elif path.startswith("/static/"):
             response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
         elif path == "/" or path == "/index.html":
             response.headers["Cache-Control"] = "public, max-age=0, s-maxage=86400, stale-while-revalidate=86400"

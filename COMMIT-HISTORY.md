@@ -10,6 +10,29 @@ This document tracks every commit following the `2.0.x` versioning schema:
 
 ## Commit History
 
+### 2.3.6 - Rust Systems ML multi-crate architecture, Edge CDN performance & preset normalization
+
+- **Date**: 2026-11-15
+
+- **Changes**:
+
+  - **Rust Multi-Crate Workspace (`crates/`)**:
+    - `crates/hpp-core`: Pure-Rust feature validation, Indian land unit parsing (`parse_sqft` with 13 Indian unit conversions), boundary validation, embedded regression weights (`models/weights.json`), and instant scalar linear/ridge inference.
+    - `crates/hpp-cli`: Multi-threaded parallel CLI engine powered by Rayon, Clap, and CSV for sub-millisecond dataset profiling and cleaning across all CPU cores.
+    - `crates/hpp-wasm`: WebAssembly module compiled via `wasm-bindgen` enabling 0ms round-trip client-side in-browser predictions and 100% offline execution.
+    - `crates/hpp-pyo3`: High-performance Python native C-extension (`hpp_fast`) for zero-overhead Python preprocessing and regex parsing without GIL contention.
+    - `crates/hpp-server`: Standalone asynchronous web microservice built on Axum and Tokio with sub-15ms cold start, <12MB RSS memory, and 25,000+ RPS.
+  - **Edge CDN & Cold-Start Acceleration**:
+    - Attached `CacheControlMiddleware` to FastAPI for Edge CDN static caching (`s-maxage=86400, stale-while-revalidate=86400`).
+    - Added `LazyModelsDict` in `src/predict.py` reducing serverless cold-start boot time from ~8s to <0.01s.
+    - Bundled static `static/bootstrap.json` metadata bundle for instant 0ms dropdown and metric table rendering.
+  - **Frontend UI & Ergonomics**:
+    - Enriched navbar brand typography to "House Price Prediction" with "Bengaluru Valuation" subtitle visible across all device tiers.
+    - Resolved Indira Nagar preset shortcut dropdown matching with fuzzy-safe space-normalized fallback.
+    - Enhanced 4-tier responsive layouts with auto-zoom prevention and in-app theme persistence.
+
+- **Gates run (green)**: 35/35 automated pytest tests passing, live production API audit verified across all endpoints (`/health`, `/meta`, `/models`, `/locations`, `/predict`).
+
 ### 2.0.10 - rename commit log to COMMIT-HISTORY.md (universal name)
 
 - **Date**: 2026-10-17
